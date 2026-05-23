@@ -1,0 +1,311 @@
+;">Aksi</th>
+</tr>
+</thead>
+<tbody id="tableBody">
+<!-- Data will be injected here -->
+</tbody>
+</table>
+<div id="emptyState" class="empty-state hidden">
+Belum ada data. Silakan tambah data baru.
+</div>
+</div>
+</div>
+</div>
+
+<!-- FORM VIEW -->
+<div id="formView" class="form-view-container">
+<div class="form-card">
+<h2 class="form-title" id="formTitle">Tambah Data Baru</h2>
+<form id="maintenanceForm" onsubmit="app.handleFormSubmit(event)">
+<input type="hidden" id="editId">
+
+<div class="form-group">
+<label>Kode / ID</label>
+<input type="text" id="kode" name="kode" required autocomplete="off" placeholder="Contoh: AC-101">
+</div>
+
+<div class="form-group">
+<label>Lokasi</label>
+<input type="text" id="lokasi" name="lokasi" required autocomplete="off" placeholder="Contoh: Room 301">
+</div>
+
+<div class="form-group">
+<label>Kerusakan</label>
+<input type="text" id="kerusakan" name="kerusakan" required autocomplete="off" placeholder="Contoh: Tidak dingin">
+</div>
+
+<div class="form-group">
+<label>Tanggal Lapor</label>
+<input type="date" id="tanggal_lapor" name="tanggal_lapor" required>
+</div>
+
+<div class="form-group">
+<label>Status</label>
+<select id="status" name="status">
+<option value="Process">Process (Sedang Dikerjakan)</option>
+<option value="Done">Done (Selesai)</option>
+<option value="Pending">Pending (Menunggu)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Nama Teknisi</label>
+<input type="text" id="teknisi" name="teknisi" required autocomplete="off" placeholder="Nama teknisi">
+</div>
+
+<div style="display: flex; gap: 10px; margin-top: 30px;">
+<button type="submit" class="btn btn-primary" style="flex: 1;">💾 Simpan Data</button>
+<button type="button" onclick="app.navigate(app.currentType)" class="btn btn-secondary">Batal</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- DELETE CONFIRMATION VIEW -->
+<div id="deleteView" class="form-view-container">
+<div class="form-card" style="border-top: 5px solid var(--danger); text-align: center;">
+<div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
+<h2 class="form-title" style="color: var(--danger);">Hapus Data?</h2>
+<p style="color: var(--text-muted); margin-bottom: 25px;">Tindakan ini akan menghapus data secara permanen dan tidak dapat dikembalikan.</p>
+
+<form onsubmit="app.confirmDelete(event)">
+<input type="hidden" id="deleteId">
+<button type="submit" class="btn btn-danger" style="width: 100%; margin-bottom: 10px;">Ya, Hapus Permanen</button>
+<button type="button" onclick="app.navigate(app.currentType)" class="btn btn-secondary" style="width: 100%;">Batal</button>
+</form>
+</div>
+</div> </main>
+
+<!-- TOAST NOTIFICATION -->
+<div id="toast">Notifikasi</div>
+
+<script>
+// --- DATA STORE (Mock Database) ---
+const DB_KEY = "hotel_maintenance_db";
+
+// Helper untuk load/save ke LocalStorage
+const store = {
+get: () => {
+const data = localStorage.getItem(DB_KEY);
+return data ? JSON.parse(data) : { ac: [], jetspray: [], minibar: [], vincard: [] };
+},
+save: (data) => {
+localStorage.setItem(DB_KEY, JSON.stringify(data));
+}
+};
+
+// --- APP LOGIC ---
+const app = {
+currentType: 'ac', // default view
+
+init: () => {
+app.navigate('ac');
+},
+
+// Navigation Switcher
+navigate: (type) => {
+app.currentType = type;
+
+// Update Sidebar UI
+document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+document.getElementById(`nav-${type}`).classList.add('active');
+
+// Set Title
+const titles = {
+'ac': 'AC Problem',
+'jetspray': 'Jetspray Issue',
+'minibar': 'Minibar Issue',
+'vincard': 'Vincard Issue'
+};
+document.getElementById('pageTitle').innerText = titles[type];
+
+// Reset Views
+app.showListView();
+app.renderTable();
+},
+
+// Show/Hide Views
+showListView: () => {
+document.getElementById('listView').classList.remove('hidden');
+document.getElementById('formView').style.display = 'none';
+document.getElementById('deleteView').style.display = 'none';
+},
+
+showForm: (editData = null) => {
+document.getElementById('listView').classList.add('hidden');
+document.getElementById('deleteView').style.display = 'none';
+document.getElementById('formView').style.display = 'flex';
+
+const form = document.getElementById('maintenanceForm');
+const title = document.getElementById('formTitle');
+
+if (editData) {
+title.innerText = `Edit Data ${app.currentType.toUpperCase()}`;
+document.getElementById('editId').value = editData._id;
+document.getElementById('kode').value = editData.kode;
+document.getElementById('lokasi').value = editData.lokasi;
+document.getElementById('kerusakan').value = editData.kerusakan;
+document.getElementById('tanggal_lapor').value = editData.tanggal_lapor;
+document.getElementById('status').value = editData.status;
+document.getElementById('teknisi').value = editData.teknisi.nama;
+} else {
+title.innerText = `Tambah Data ${app.currentType.toUpperCase()}`;
+form.reset();
+document.getElementById('editId').value = "";
+// Set default date to today
+document.getElementById('tanggal_lapor').valueAsDate = new Date();
+}
+},
+
+showDeleteConfirm: (id) => {
+document.getElementById('listView').classList.add('hidden');
+document.getElementById('formView').style.display = 'none';
+document.getElementById('deleteView').style.display = 'flex';
+document.getElementById('deleteId').value = id;
+},
+
+// CRUD Operations
+handleFormSubmit: (e) => {
+e.preventDefault();
+const db = store.get();
+const collection = db[app.currentType];
+
+const formData = {
+kode: document.getElementById('kode').value,
+lokasi: document.getElementById('lokasi').value,
+kerusakan: document.getElementById('kerusakan').value,
+tanggal_lapor: document.getElementById('tanggal_lapor').value,
+status: document.getElementById('status').value,
+teknisi: { nama: document.getElementById('teknisi').value }
+};
+
+const editId = document.getElementById('editId').value;
+
+if (editId) {
+// Update
+const index = collection.findIndex(item => item._id == editId);
+if (index !== -1) {
+collection[index] = { ...collection[index], ...formData, _id: editId };
+app.showToast("Data berhasil diperbarui!", "success");
+}
+} else {
+// Create
+const newId = Date.now().toString(); // Simple ID generation
+collection.push({ _id: newId, ...formData });
+app.showToast("Data baru berhasil ditambahkan!", "success");
+}
+
+db[app.currentType] = collection;
+store.save(db);
+app.navigate(app.currentType);
+},
+
+editItem: (id) => {
+const db = store.get();
+const item = db[app.currentType].find(i => i._id == id);
+if (item) app.showForm(item);
+},
+
+confirmDelete: (e) => {
+e.preventDefault();
+const id = document.getElementById('deleteId').value;
+const db = store.get();
+
+db[app.currentType] = db[app.currentType].filter(item => item._id != id);
+store.save(db);
+
+app.showToast("Data berhasil dihapus.", "error");
+app.navigate(app.currentType);
+},
+
+// Rendering
+renderTable: () => {
+const db = store.get();
+const data = db[app.currentType] || [];
+const tbody = document.getElementById('tableBody');
+const emptyState = document.getElementById('emptyState');
+
+tbody.innerHTML = '';
+
+if (data.length === 0) {
+emptyState.classList.remove('hidden');
+return;
+} else {
+emptyState.classList.add('hidden');
+}
+
+// Sort by newest (based on ID timestamp)
+const sortedData = data.sort((a, b) => b._id.localeCompare(a._id));
+
+sortedData.forEach(item => {
+let statusClass = 'badge-process';
+if (item.status === 'Done') statusClass = 'badge-done';
+if (item.status === 'Pending') statusClass = 'badge-pending';
+
+const tr = document.createElement('tr');
+tr.innerHTML = `
+<td><span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:4px; font-size:0.85rem;">${item.kode}</span></td>
+<td style="font-weight:500;">${item.lokasi}</td>
+<td>${item.kerusakan}</td>
+<td>${item.tanggal_lapor}</td>
+<td><span class="badge ${statusClass}">${item.status}</span></td>
+<td>${item.teknisi.nama}</td>
+<td style="text-align: right;">
+<span onclick="app.editItem('${item._id}')" class="action-link edit-link">Edit</span>
+<span onclick="app.showDeleteConfirm('${item._id}')" class="action-link delete-link">Hapus</span>
+</td>
+`;
+tbody.appendChild(tr);
+});
+},
+
+filterTable: () => {
+const input = document.getElementById('searchInput');
+const filter = input.value.toUpperCase();
+const table = document.getElementById('dataTable');
+const tr = table.getElementsByTagName('tr');
+
+let hasVisibleRow = false;
+
+for (let i = 1; i < tr.length; i++) {
+let tds = tr[i].getElementsByTagName("td");
+let visible = false;
+
+for(let j=0; j<tds.length; j++){
+if(tds[j].textContent.toUpperCase().indexOf(filter) > -1){
+visible = true;
+break;
+}
+}
+
+if(visible) {
+tr[i].classList.remove('hidden-row');
+hasVisibleRow = true;
+} else {
+tr[i].classList.add('hidden-row');
+}
+}
+
+const emptyState = document.getElementById('emptyState');
+// Jika semua baris terhidden karena filter, dan data asli tidak kosong
+if (!hasVisibleRow && store.get()[app.currentType].length > 0) {
+// Optional: Tampilkan pesan "Tidak ditemukan" khusus filter,
+// tapi untuk simplifikasi kita biarkan kosong atau gunakan logika custom jika perlu.
+// Saat ini table hanya menyembunyikan row.
+}
+},
+
+showToast: (message, type) => {
+const toast = document.getElementById("toast");
+toast.className = "show " + type;
+toast.innerText = message;
+setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+}
+};
+
+// Start App
+document.addEventListener('DOMContentLoaded', app.init);
+</script>
+</body>
+</html>
+```
