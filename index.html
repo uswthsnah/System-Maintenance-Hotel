@@ -17,6 +17,7 @@
       --border: #e2e8f0;
       --green: #10b981; 
       --red: #ef4444;
+      --sidebar-width: 280px;
     }
 
     html { font-size: 16px; }
@@ -39,7 +40,7 @@
       position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;
     }
     .login-card {
-      background: white; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px;
+      background: white; padding: 40px; border-radius: 16px; width: 90%; max-width: 400px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center;
     }
     .login-logo { font-size: 3rem; margin-bottom: 20px; }
@@ -47,74 +48,97 @@
     .login-subtitle { color: #64748b; margin-bottom: 30px; font-size: 0.9rem; }
 
     /* --- APP LAYOUT --- */
-    #appView { display: none; height: 100vh; display: flex; }
+    #appView { display: none; height: 100vh; display: flex; position: relative; }
 
     /* SIDEBAR */
     .sidebar {
-      width: 280px; /* Sedikit diperlebar untuk form tambah */
-      background: var(--secondary); color: white;
-      padding: 25px; display: flex; flex-direction: column;
-      box-shadow: 4px 0 10px rgba(0,0,0,0.1); z-index: 10;
-      font-size: 0.95rem;
+      width: var(--sidebar-width); background: var(--secondary); color: white;
+      padding: 20px; display: flex; flex-direction: column;
+      box-shadow: 4px 0 10px rgba(0,0,0,0.1); z-index: 50;
+      font-size: 0.9rem;
       overflow-y: auto;
+      height: 100%;
+      transition: transform 0.3s ease-in-out;
     }
 
-    .sidebar-header { margin-bottom: 30px; }
+    .sidebar-header { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #334155; }
     .sidebar h2 { 
-      font-size: 1.5rem; font-weight: 700; color: white; line-height: 1.2;
+      font-size: 1.3rem; font-weight: 700; color: white; line-height: 1.2;
       display: flex; flex-direction: column; 
     }
     .sidebar h2 span { color: #38bdf8; }
 
-    /* MENU LIST (Dynamic) */
+    /* MENU LIST */
     #dynamicMenu {
-      flex: 1; /* Mengisi ruang kosong */
-      overflow-y: auto;
-      margin-bottom: 20px;
+      flex: 1; overflow-y: auto; margin-bottom: 10px;
     }
 
     .sidebar a {
-      display:block; color:#94a3b8; text-decoration:none; margin: 5px 0;
-      padding: 12px 15px; border-radius: 8px; transition: all 0.3s ease; font-weight: 500;
+      display:block; color:#94a3b8; text-decoration:none; margin: 4px 0;
+      padding: 10px 12px; border-radius: 6px; transition: all 0.2s ease; font-weight: 500;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .sidebar a:hover, .sidebar a.active {
-      background: #1e293b; color: white; transform: translateX(5px);
+      background: #1e293b; color: white;
     }
 
-    /* FORM TAMBAH KATEGORI DI SIDEBAR */
+    /* FORM TAMBAH KATEGORI */
     .add-category-box {
-      border-top: 1px solid #334155;
-      padding-top: 20px;
-      margin-top: 10px;
+      border-top: 1px solid #334155; padding-top: 15px; margin-top: 10px;
     }
     .add-category-label {
-      color: #94a3b8; font-size: 0.75rem; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: #94a3b8; font-size: 0.7rem; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
     }
     .input-group {
       display: flex; gap: 5px;
     }
     .input-group input {
       flex: 1; background: #334155; border: 1px solid #475569; color: white;
-      padding: 8px 12px; border-radius: 6px; outline: none; font-size: 0.9rem;
+      padding: 8px 10px; border-radius: 6px; outline: none; font-size: 0.85rem;
     }
     .input-group input:focus { border-color: var(--primary); }
     .input-group button {
-      background: var(--green); border: none; color: white; width: 36px;
-      border-radius: 6px; cursor: pointer; font-size: 1.2rem; display: flex;
-      align-items: center; justify-content: center;
+      background: var(--green); border: none; color: white; width: 32px;
+      border-radius: 6px; cursor: pointer; font-size: 1.1rem; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
     }
     .input-group button:hover { background: #059669; }
 
-    .sidebar .logout-btn { margin-top: 15px; color: #f87171; border: 1px solid #f87171; text-align: center; }
+    .sidebar .logout-btn { margin-top: 10px; color: #f87171; border: 1px solid #f87171; text-align: center; }
     .sidebar .logout-btn:hover { background: #450a0a; color: #fee2e2; }
 
     /* MAIN CONTENT */
-    .main { flex:1; padding: 0; overflow-y: auto; position: relative; background: var(--bg-body); }
-    .content-wrapper { padding: 30px; max-width: 1200px; margin: 0 auto; }
+    .main { 
+      flex:1; 
+      padding: 0; 
+      overflow-y: auto; 
+      position: relative; 
+      background: var(--bg-body); 
+      width: 100%;
+    }
+    .content-wrapper { 
+      padding: 20px; max-width: 1200px; margin: 0 auto; 
+    }
+
+    /* HEADER MOBILE (Hamburger) */
+    .mobile-header {
+      display: none; /* Hidden di desktop */
+      padding: 15px 20px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hamburger {
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-main);
+    }
 
     .card {
-      background:white; padding: 30px; border-radius: 16px;
+      background:white; padding: 20px; border-radius: 16px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border);
     }
 
@@ -122,48 +146,68 @@
     .hidden { display: none !important; }
 
     /* HEADER & BUTTONS */
-    .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .page-title h2 { font-size: 1.5rem; font-weight: 700; color: #1e293b; }
-    .page-title p { color: var(--text-muted); font-size: 0.9rem; }
+    .header-flex { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-start; /* Align top agar text tidak tengah2 */
+      margin-bottom: 20px; 
+      flex-direction: column; 
+      gap: 15px;
+    }
+    @media (min-width: 768px) {
+      .header-flex { flex-direction: row; align-items: center; }
+    }
+    
+    .page-title h2 { font-size: 1.25rem; font-weight: 700; color: #1e293b; }
+    .page-title p { color: var(--text-muted); font-size: 0.85rem; }
 
     .add-btn-inline { 
-      display: inline-block; padding: 10px 20px; background: var(--green); 
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 10px 20px; background: var(--green); 
       color: white; border-radius: 8px; text-decoration: none; font-weight: 600; 
-      font-size: 0.9rem; cursor: pointer; border: none;
+      font-size: 0.9rem; cursor: pointer; border: none; width: 100%;
+    }
+    @media (min-width: 768px) {
+      .add-btn-inline { width: auto; }
     }
     .add-btn-inline:hover { background: #059669; }
 
     /* SEARCH */
     .search-box { position: relative; margin-bottom: 20px; }
     .search-box input {
-      width: 100%; padding: 14px 15px 14px 45px; border: 2px solid var(--border);
-      border-radius: 12px; font-size: 0.95rem; color: var(--text-main); background: #f8fafc;
+      width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--border);
+      border-radius: 10px; font-size: 0.9rem; color: var(--text-main); background: #f8fafc;
       transition: all 0.3s;
     }
     .search-box input:focus { outline: none; border-color: var(--primary); background: white; }
     .search-box::before {
-      content: "🔍"; position: absolute; left: 15px; top: 50%;
-      transform: translateY(-50%); opacity: 0.5;
+      content: "🔍"; position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%); opacity: 0.5; font-size: 0.9rem;
     }
 
-    /* TABLE */
-    table { width:100%; border-collapse:collapse; }
-    th { 
-      text-align: left; padding: 16px; background: #f8fafc; color: var(--text-muted); 
-      font-weight: 600; font-size: 0.85rem; text-transform: uppercase; 
-      letter-spacing: 0.5px; border-bottom: 2px solid var(--border); 
+    /* TABLE SCROLL */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
     }
-    td { padding: 16px; border-bottom: 1px solid #f1f5f9; color: var(--text-main); vertical-align: middle; font-size: 0.9rem;}
+    table { width:100%; border-collapse:collapse; min-width: 800px; } /* Min width biar bisa discroll di HP */
+    th { 
+      text-align: left; padding: 12px; background: #f8fafc; color: var(--text-muted); 
+      font-weight: 600; font-size: 0.75rem; text-transform: uppercase; 
+      letter-spacing: 0.5px; border-bottom: 2px solid var(--border); white-space: nowrap;
+    }
+    td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: var(--text-main); vertical-align: middle; font-size: 0.85rem;}
     tr:last-child td { border-bottom: none; }
     tr:hover td { background-color: #f8fafc; }
 
     /* BADGES */
-    .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-    .done { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .process { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
-    .pending { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
+    .done { background: #dcfce7; color: #166534; }
+    .process { background: #fef9c3; color: #854d0e; }
+    .pending { background: #fee2e2; color: #991b1b; }
   
-    .action-link { text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; margin-right: 5px; display: inline-block; cursor: pointer;}
+    .action-link { text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; margin-right: 2px; display: inline-block; cursor: pointer;}
     .edit-link { background: #e0f2fe; color: #0369a1; }
     .delete-link { background: #fee2e2; color: #991b1b; }
 
@@ -171,30 +215,42 @@
     .modal-container {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
-      z-index: 100; justify-content: center; align-items: center;
+      z-index: 1000; justify-content: center; align-items: center; padding: 20px;
     }
 
     .modal-card {
       background: white; width: 100%; max-width: 500px; border-radius: 16px;
-      padding: 40px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-      animation: popIn 0.2s ease-out;
+      padding: 30px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      animation: popIn 0.2s ease-out; max-height: 90vh; overflow-y: auto;
     }
 
     @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-    .form-title { font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 25px; text-align: left; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #475569; font-size: 0.9rem; }
+    .form-title { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 20px; text-align: left; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #475569; font-size: 0.85rem; }
     .form-group input, .form-group select {
-      width: 100%; padding: 12px 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; color: var(--text-main); transition: all 0.3s; background-color: #f8fafc;
+      width: 100%; padding: 10px 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 0.95rem; color: var(--text-main); transition: all 0.3s; background-color: #f8fafc;
     }
     .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); background-color: white; }
 
-    .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; }
-    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; margin-bottom: 10px; }
+    .btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; margin-bottom: 8px; }
     .btn-secondary { background: #e2e8f0; color: #475569; }
     .btn-secondary:hover { background: #cbd5e1; }
     .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
+
+    /* --- RESPONSIVE QUERIES --- */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed; left: -100%; top: 0; bottom: 0; width: 80%; max-width: 300px;
+        box-shadow: 10px 0 20px rgba(0,0,0,0.2);
+      }
+      .sidebar.active { left: 0; }
+      
+      .mobile-header { display: flex; }
+      .content-wrapper { padding: 15px; }
+    }
 
   </style>
 </head>
@@ -221,17 +277,24 @@
 
   <!-- 2. APP VIEW -->
   <div id="appView" style="display: none;">
-    <div class="sidebar">
+    
+    <!-- HEADER MOBILE (Muncul hanya di HP) -->
+    <div class="mobile-header">
+      <button class="hamburger" onclick="app.toggleSidebar()">☰</button>
+      <div style="font-weight: 700; color: var(--secondary);">Maintenance System</div>
+      <div style="width: 24px;"></div> <!-- Spacer -->
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebarMenu">
       <div class="sidebar-header">
         <h2>System<br><span>Maintenance Hotel</span></h2>
       </div>
       
-      <!-- MENU DINAMIS (AKAN DIBUAT OLEH JAVASCRIPT) -->
       <div id="dynamicMenu"></div>
 
-      <!-- FITUR TAMBAH KATEGORI BARU -->
       <div class="add-category-box">
-        <div class="add-category-label">Tambah Kategori Baru</div>
+        <div class="add-category-label">Tambah Kategori</div>
         <div class="input-group">
           <input type="text" id="newCategoryName" placeholder="Contoh: Pintu">
           <button onclick="app.addCategory()" title="Tambah">+</button>
@@ -256,25 +319,27 @@
             <input type="text" id="searchInput" placeholder="Cari kode, lokasi, kerusakan..." onkeyup="app.filterTable()">
           </div>
 
-          <!-- PESAN DATA TIDAK DITEMUKAN -->
-          <div id="noDataMessage" class="hidden" style="text-align: center; padding: 40px; color: #94a3b8; font-size: 1.1rem;">
-            Data tidak ditemukan
-          </div>
+          <!-- WRAPPER AGAR TABEL BISA DISCROLL DI HP -->
+          <div class="table-responsive">
+            <div id="noDataMessage" class="hidden" style="text-align: center; padding: 40px; color: #94a3b8; font-size: 0.9rem;">
+              Data tidak ditemukan
+            </div>
 
-          <table id="myTable">
-            <thead>
-              <tr>
-                <th>KODE</th>
-                <th>LOKASI</th>
-                <th>KERUSAKAN</th>
-                <th>TANGGAL</th>
-                <th>STATUS</th>
-                <th>TEKNISI</th>
-                <th>AKSI</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-          </table>
+            <table id="myTable">
+              <thead>
+                <tr>
+                  <th>KODE</th>
+                  <th>LOKASI</th>
+                  <th>KERUSAKAN</th>
+                  <th>TANGGAL</th>
+                  <th>STATUS</th>
+                  <th>TEKNISI</th>
+                  <th>AKSI</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -319,15 +384,17 @@
     </div>
   </div>
 
+  <!-- OVERLAY HITAM UNTUK SIDEBAR MOBILE -->
+  <div id="sidebarOverlay" onclick="app.toggleSidebar()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:40;"></div>
+
   <script>
-    const DB_KEY = "hotel_maintenance_db_dynamic";
+    const DB_KEY = "hotel_maintenance_db_final";
     const AUTH_KEY = "hotel_auth_status";
 
     const store = {
       get: () => {
         const data = localStorage.getItem(DB_KEY);
         if (!data) {
-          // Data Default Awal
           const initialData = {
             ac: [
               { _id: "1", kode: "M008", lokasi: "Kamar 820", kerusakan: "AC tidak dingin", tanggal_lapor: "2026-04-10", status: "Done", teknisi: { nama: "Budi" } }
@@ -348,9 +415,7 @@
       currentType: 'ac',
 
       init: () => {
-        // Force Logout
         localStorage.removeItem(AUTH_KEY); 
-        
         if (localStorage.getItem(AUTH_KEY) === 'true') {
           app.showApp();
         } else {
@@ -379,24 +444,34 @@
       showApp: () => { 
         document.getElementById('loginView').style.display = 'none'; 
         document.getElementById('appView').style.display = 'flex'; 
-        app.renderSidebar(); // Render menu dari database
-        app.navigate('ac'); // Default ke AC
+        app.renderSidebar(); 
+        app.navigate('ac'); 
       },
 
-      // --- FUNGSI RENDER SIDEBAR (DINAMIS) ---
+      // --- RESPONSIVE SIDEBAR ---
+      toggleSidebar: () => {
+        const sb = document.getElementById('sidebarMenu');
+        const ov = document.getElementById('sidebarOverlay');
+        if (sb.classList.contains('active')) {
+          sb.classList.remove('active');
+          ov.style.display = 'none';
+        } else {
+          sb.classList.add('active');
+          ov.style.display = 'block';
+        }
+      },
+
       renderSidebar: () => {
         const db = store.get();
         const menuContainer = document.getElementById('dynamicMenu');
         menuContainer.innerHTML = '';
 
-        // Loop semua kategori yang ada di database
         Object.keys(db).forEach(key => {
           const a = document.createElement('a');
           a.href = "#";
           a.className = "nav-link";
           a.id = `nav-${key}`;
           
-          // Icon sederhana berdasarkan nama kategori (opsional)
           let icon = "📝"; 
           if(key.includes('ac')) icon = "❄️";
           if(key.includes('water') || key.includes('spray')) icon = "🚿";
@@ -404,53 +479,38 @@
           if(key.includes('card') || key.includes('key')) icon = "🔑";
           
           a.innerText = `${icon} ${key.charAt(0).toUpperCase() + key.slice(1)} Problem`;
-          a.onclick = (e) => { e.preventDefault(); app.navigate(key); };
+          a.onclick = (e) => { 
+            e.preventDefault(); 
+            app.navigate(key); 
+            // Tutup sidebar otomatis di HP setelah klik menu
+            if(window.innerWidth <= 768) app.toggleSidebar();
+          };
           
           menuContainer.appendChild(a);
         });
       },
 
-      // --- FUNGSI TAMBAH KATEGORI BARU ---
       addCategory: () => {
         const input = document.getElementById('newCategoryName');
         const name = input.value.trim();
-
-        if (!name) {
-          alert("Nama kategori tidak boleh kosong!");
-          return;
-        }
-
+        if (!name) { alert("Nama kategori tidak boleh kosong!"); return; }
         const db = store.get();
-        const key = name.toLowerCase().replace(/\s+/g, '_'); // Jadikan slug (contoh: Pintu Rusak -> pintu_rusak)
-
-        if (db[key]) {
-          alert("Kategori ini sudah ada!");
-          return;
-        }
-
-        // Tambah kategori baru ke database
+        const key = name.toLowerCase().replace(/\s+/g, '_'); 
+        if (db[key]) { alert("Kategori ini sudah ada!"); return; }
         db[key] = [];
         store.save(db);
-
-        // Refresh sidebar dan pindah ke kategori baru
         app.renderSidebar();
         app.navigate(key);
-        
-        input.value = ""; // Kosongkan input
+        input.value = ""; 
         alert(`Kategori "${name}" berhasil ditambahkan!`);
       },
 
       navigate: (type) => {
         app.currentType = type;
-        
-        // Update Active State
         document.querySelectorAll('.sidebar a').forEach(el => el.classList.remove('active'));
         document.getElementById(`nav-${type}`)?.classList.add('active');
-        
-        // Update Judul (Hilangkan underscore dan capitalize)
         const displayName = type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         document.getElementById('pageTitle').innerText = `${displayName} Problem`;
-        
         app.closeModals();
         document.getElementById('listView').classList.remove('hidden');
         app.renderTable();
@@ -486,12 +546,7 @@
       handleFormSubmit: (e) => {
         e.preventDefault();
         const db = store.get();
-        // Cek apakah kategori ada (jika user hapus kategori tapi masih buka form)
-        if(!db[app.currentType]) { 
-          alert("Kategori tidak valid"); 
-          return; 
-        }
-
+        if(!db[app.currentType]) { alert("Kategori tidak valid"); return; }
         const collection = db[app.currentType];
         const formData = {
           kode: document.getElementById('kode').value, lokasi: document.getElementById('lokasi').value,
