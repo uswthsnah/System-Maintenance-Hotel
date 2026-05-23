@@ -53,13 +53,12 @@
       box-shadow: 4px 0 10px rgba(0,0,0,0.1); z-index: 10;
     }
 
-    /* JUDUL SIDEBAR SESUAI GAMBAR (SYSTEM di atas, Maintenance Hotel di bawah) */
     .sidebar-header { margin-bottom: 40px; }
     .sidebar h2 { 
       font-size: 1.5rem; font-weight: 700; color: white; line-height: 1.2;
       display: flex; flex-direction: column; 
     }
-    .sidebar h2 span { color: #38bdf8; } /* Warna biru muda untuk "Maintenance Hotel" */
+    .sidebar h2 span { color: #38bdf8; }
 
     .sidebar a {
       display:block; color:#94a3b8; text-decoration:none; margin: 8px 0;
@@ -129,7 +128,7 @@
     .edit-link { background: #e0f2fe; color: #0369a1; }
     .delete-link { background: #fee2e2; color: #991b1b; }
 
-    /* --- FORM MODAL (SESUAI GAMBAR KEDUA) --- */
+    /* --- FORM MODAL --- */
     .modal-container {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
@@ -152,10 +151,11 @@
     }
     .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); background-color: white; }
 
-    /* Tombol di Form (Tambah Data Baru = Biru, Batal = Abu) */
-    .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; margin-bottom: 10px; }
-    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
+    /* BUTTONS DI BAWAH FORM */
+    .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; margin-bottom: 10px; } /* Jarak ke tombol bawah */
     .btn-secondary { background: #e2e8f0; color: #475569; }
+    .btn-secondary:hover { background: #cbd5e1; }
     .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
 
   </style>
@@ -181,13 +181,10 @@
     </div>
   </div>
 
-  <!-- 2. APP VIEW (Main Dashboard) -->
+  <!-- 2. APP VIEW -->
   <div id="appView" style="display: none;">
-    
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-header">
-        <!-- Judul Sesuai Gambar -->
         <h2>System<br><span>Maintenance Hotel</span></h2>
       </div>
       <a href="#" onclick="app.navigate('ac')" class="nav-link active" id="nav-ac">AC Problem</a>
@@ -197,9 +194,7 @@
       <a href="#" onclick="app.logout()" class="nav-link logout-btn">🚪 Logout</a>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="main">
-      <!-- A. LIST VIEW -->
       <div id="listView" class="content-wrapper">
         <div class="card">
           <div class="header-flex">
@@ -235,10 +230,9 @@
     </div>
   </div>
 
-  <!-- 3. FORM MODAL (Sesuai Gambar 2) -->
+  <!-- 3. FORM MODAL -->
   <div id="formModal" class="modal-container">
     <div class="modal-card">
-      <!-- Judul Form Sesuai Gambar -->
       <h2 class="form-title" id="formTitle">Tambah Data AC</h2>
       <form onsubmit="app.handleFormSubmit(event)">
         <input type="hidden" id="editId">
@@ -255,7 +249,7 @@
         </div>
         <div class="form-group"><label>Nama Teknisi</label><input type="text" id="teknisi" name="teknisi" required autocomplete="off"></div>
         
-        <!-- Tombol Sesuai Gambar -->
+        <!-- TOMBOL: SIMPAN (BIRU) & BATAL (ABU-ABU) -->
         <button type="submit" class="btn btn-primary">Tambah Data Baru</button>
         <button type="button" onclick="app.closeModals()" class="btn btn-secondary">Batal</button>
       </form>
@@ -277,21 +271,18 @@
   </div>
 
   <script>
-    // --- DATA STORE ---
-    const DB_KEY = "hotel_maintenance_db_v2";
+    const DB_KEY = "hotel_maintenance_db_v3";
     const AUTH_KEY = "hotel_auth_status";
 
     const store = {
       get: () => {
         const data = localStorage.getItem(DB_KEY);
         if (!data) {
-          // Data Dummy Sesuai Gambar
           const initialData = {
             ac: [
               { _id: "1", kode: "M008", lokasi: "Kamar 820", kerusakan: "AC tidak dingin", tanggal_lapor: "2026-04-10", status: "Done", teknisi: { nama: "Budi" } },
               { _id: "2", kode: "M009", lokasi: "Lobby", kerusakan: "Bocor", tanggal_lapor: "2026-04-11", status: "Process", teknisi: { nama: "Agus" } },
-              { _id: "3", kode: "M010", lokasi: "Kamar 101", kerusakan: "Remote error", tanggal_lapor: "2026-04-09", status: "Pending", teknisi: { nama: "-" } },
-              { _id: "4", kode: "M011", lokasi: "Restoran", kerusakan: "Bunyi kasar", tanggal_lapor: "2026-04-12", status: "Done", teknisi: { nama: "Dedi" } }
+              { _id: "3", kode: "M011", lokasi: "Restoran", kerusakan: "Bunyi kasar", tanggal_lapor: "2026-04-12", status: "Done", teknisi: { nama: "Dedi" } }
             ],
             jetspray: [], minibar: [], vincard: []
           };
@@ -303,7 +294,6 @@
       save: (data) => localStorage.setItem(DB_KEY, JSON.stringify(data))
     };
 
-    // --- APP LOGIC ---
     const app = {
       currentType: 'ac',
 
@@ -351,7 +341,7 @@
           document.getElementById('status').value = editData.status;
           document.getElementById('teknisi').value = editData.teknisi.nama;
         } else {
-          title.innerText = `Tambah Data AC`; // Judul default
+          title.innerText = `Tambah Data AC`;
           document.querySelector('#formModal form').reset();
           document.getElementById('editId').value = "";
           document.getElementById('tanggal_lapor').valueAsDate = new Date();
