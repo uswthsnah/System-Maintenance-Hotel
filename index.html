@@ -2,7 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 1. KUNCI ZOOM AGAR TIDAK BESAR/KECIL -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Sistem Maintenance Hotel</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -19,6 +20,8 @@
       --red: #ef4444;
     }
 
+    /* 2. RESET CSS AGAR TIDAK ZOOM */
+    html { font-size: 16px; }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     
     body { 
@@ -26,11 +29,13 @@
       height: 100vh;
       overflow: hidden;
       color: var(--text-main);
+      font-size: 16px; /* Paksa font size standar */
     }
 
     /* --- LOGIN PAGE --- */
     #loginView {
-      display: flex; justify-content: center; align-items: center;
+      display: none; /* Default hidden, diatur via JS */
+      justify-content: center; align-items: center;
       height: 100vh;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;
@@ -51,6 +56,7 @@
       width: 260px; background: var(--secondary); color: white;
       padding: 25px; display: flex; flex-direction: column;
       box-shadow: 4px 0 10px rgba(0,0,0,0.1); z-index: 10;
+      font-size: 0.95rem;
     }
 
     .sidebar-header { margin-bottom: 40px; }
@@ -153,7 +159,7 @@
 
     /* BUTTONS DI BAWAH FORM */
     .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; }
-    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; margin-bottom: 10px; } /* Jarak ke tombol bawah */
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; margin-bottom: 10px; }
     .btn-secondary { background: #e2e8f0; color: #475569; }
     .btn-secondary:hover { background: #cbd5e1; }
     .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
@@ -249,7 +255,6 @@
         </div>
         <div class="form-group"><label>Nama Teknisi</label><input type="text" id="teknisi" name="teknisi" required autocomplete="off"></div>
         
-        <!-- TOMBOL: SIMPAN (BIRU) & BATAL (ABU-ABU) -->
         <button type="submit" class="btn btn-primary">Tambah Data Baru</button>
         <button type="button" onclick="app.closeModals()" class="btn btn-secondary">Batal</button>
       </form>
@@ -271,7 +276,7 @@
   </div>
 
   <script>
-    const DB_KEY = "hotel_maintenance_db_v3";
+    const DB_KEY = "hotel_maintenance_db_v4";
     const AUTH_KEY = "hotel_auth_status";
 
     const store = {
@@ -298,8 +303,16 @@
       currentType: 'ac',
 
       init: () => {
-        if (localStorage.getItem(AUTH_KEY) === 'true') app.showApp();
-        else app.showLogin();
+        // 3. LOGIKA WAJIB LOGOUT DULU (Force Logout)
+        // Kita hapus status login lama agar login selalu muncul
+        localStorage.removeItem(AUTH_KEY); 
+        
+        // Cek Login
+        if (localStorage.getItem(AUTH_KEY) === 'true') {
+          app.showApp();
+        } else {
+          app.showLogin();
+        }
       },
 
       login: (e) => {
@@ -309,9 +322,17 @@
         if (u === 'admin' && p === 'admin') {
           localStorage.setItem(AUTH_KEY, 'true');
           app.showApp();
-        } else alert("Username/Password salah (Coba: admin/admin)");
+        } else {
+          alert("Username/Password salah (Coba: admin/admin)");
+        }
       },
-      logout: () => { if(confirm("Keluar?")) { localStorage.removeItem(AUTH_KEY); app.showLogin(); } },
+      logout: () => { 
+        if(confirm("Keluar?")) { 
+          localStorage.removeItem(AUTH_KEY); 
+          // Saat logout, kita refresh halaman agar bersih
+          location.reload(); 
+        } 
+      },
       showLogin: () => { document.getElementById('loginView').style.display = 'flex'; document.getElementById('appView').style.display = 'none'; },
       showApp: () => { document.getElementById('loginView').style.display = 'none'; document.getElementById('appView').style.display = 'flex'; app.navigate('ac'); },
 
