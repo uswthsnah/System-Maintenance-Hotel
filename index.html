@@ -6,351 +6,301 @@
   <title>Sistem Maintenance Hotel</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* --- CSS STYLE --- */
+    /* --- CSS UTAMA --- */
     :root {
       --primary: #3b82f6;
-      --secondary: #0f172a; /* Warna Sidebar */
+      --secondary: #0f172a; 
       --bg-body: #f1f5f9;
       --bg-card: #ffffff;
       --text-main: #334155;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --green: #10b981; /* Warna tombol tambah */
+      --green: #10b981; 
       --red: #ef4444;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     
     body { 
-      display: flex; 
       background-color: var(--bg-body); 
       height: 100vh;
       overflow: hidden;
       color: var(--text-main);
     }
 
+    /* --- LOGIN PAGE --- */
+    #loginView {
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;
+    }
+    .login-card {
+      background: white; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center;
+    }
+    .login-logo { font-size: 3rem; margin-bottom: 20px; }
+    .login-title { font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+    .login-subtitle { color: #64748b; margin-bottom: 30px; font-size: 0.9rem; }
+
+    /* --- APP LAYOUT --- */
+    #appView { display: none; height: 100vh; display: flex; }
+
     /* SIDEBAR */
     .sidebar {
-      width: 260px;
-      background: var(--secondary); 
-      color: white;
-      padding: 25px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+      width: 260px; background: var(--secondary); color: white;
+      padding: 25px; display: flex; flex-direction: column;
+      box-shadow: 4px 0 10px rgba(0,0,0,0.1); z-index: 10;
     }
 
+    /* JUDUL SIDEBAR SESUAI GAMBAR (SYSTEM di atas, Maintenance Hotel di bawah) */
+    .sidebar-header { margin-bottom: 40px; }
     .sidebar h2 { 
-      margin-bottom: 30px; 
-      font-size: 1.2rem; 
-      font-weight: 700;
-      color: #38bdf8; /* Warna teks title biru muda */
-      line-height: 1.4;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-size: 1.5rem; font-weight: 700; color: white; line-height: 1.2;
+      display: flex; flex-direction: column; 
     }
+    .sidebar h2 span { color: #38bdf8; } /* Warna biru muda untuk "Maintenance Hotel" */
 
     .sidebar a {
-      display:block;
-      color:#94a3b8; 
-      text-decoration:none;
-      margin: 8px 0;
-      padding: 12px 15px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      font-weight: 500;
+      display:block; color:#94a3b8; text-decoration:none; margin: 8px 0;
+      padding: 12px 15px; border-radius: 8px; transition: all 0.3s ease; font-weight: 500;
     }
-
     .sidebar a:hover, .sidebar a.active {
-      background: #1e293b;
-      color: white;
-      transform: translateX(5px);
+      background: #1e293b; color: white; transform: translateX(5px);
     }
+    .sidebar .logout-btn { margin-top: auto; color: #f87171; border: 1px solid #f87171; text-align: center; }
+    .sidebar .logout-btn:hover { background: #450a0a; color: #fee2e2; }
 
     /* MAIN CONTENT */
-    .main { 
-      flex:1; 
-      padding: 0; 
-      overflow-y: auto; 
-      position: relative;
-    }
+    .main { flex:1; padding: 0; overflow-y: auto; position: relative; background: var(--bg-body); }
+    .content-wrapper { padding: 30px; max-width: 1200px; margin: 0 auto; }
 
-    .content-wrapper {
-      padding: 30px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    /* CARD */
     .card {
-      background:white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-      border: 1px solid var(--border);
+      background:white; padding: 30px; border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border);
     }
+
+    /* UTILS */
+    .hidden { display: none !important; }
 
     /* HEADER & BUTTONS */
     .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    
-    .page-title h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1e293b;
-    }
-    .page-title p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+    .page-title h2 { font-size: 1.5rem; font-weight: 700; color: #1e293b; }
+    .page-title p { color: var(--text-muted); font-size: 0.9rem; }
 
-    /* Tombol Hijau (Sesuai Screenshot) */
     .add-btn-inline { 
-      display: inline-block; 
-      padding: 10px 20px; 
-      background: var(--green); 
-      color: white; 
-      border-radius: 8px; 
-      text-decoration: none; 
-      font-weight: 600; 
-      font-size: 0.9rem; 
-      box-shadow: 0 2px 5px rgba(16, 185, 129, 0.2); 
-      cursor: pointer;
-      border: none;
+      display: inline-block; padding: 10px 20px; background: var(--green); 
+      color: white; border-radius: 8px; text-decoration: none; font-weight: 600; 
+      font-size: 0.9rem; cursor: pointer; border: none;
     }
     .add-btn-inline:hover { background: #059669; }
 
-    /* SEARCH BAR */
-    .search-box {
-      position: relative;
-      margin-bottom: 20px;
-    }
+    /* SEARCH */
+    .search-box { position: relative; margin-bottom: 20px; }
     .search-box input {
-      width: 100%;
-      padding: 14px 15px 14px 45px;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      font-size: 0.95rem;
-      color: var(--text-main);
-      background: #f8fafc;
+      width: 100%; padding: 14px 15px 14px 45px; border: 2px solid var(--border);
+      border-radius: 12px; font-size: 0.95rem; color: var(--text-main); background: #f8fafc;
       transition: all 0.3s;
     }
-    .search-box input:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: white;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-    }
+    .search-box input:focus { outline: none; border-color: var(--primary); background: white; }
     .search-box::before {
-      content: "🔍";
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      opacity: 0.5;
+      content: "🔍"; position: absolute; left: 15px; top: 50%;
+      transform: translateY(-50%); opacity: 0.5;
     }
 
     /* TABLE */
-    table { width:100%; border-collapse:collapse; margin-top: 10px; }
-    
-    /* HEADER TABEL HURUF BESAR (Sesuai Screenshot) */
+    table { width:100%; border-collapse:collapse; }
     th { 
-      text-align: left; 
-      padding: 16px; 
-      background: #f8fafc; 
-      color: var(--text-muted); 
-      font-weight: 600; 
-      font-size: 0.85rem; 
-      text-transform: uppercase; /* Ini membuat huruf besar */
-      letter-spacing: 0.5px; 
-      border-bottom: 2px solid var(--border); 
+      text-align: left; padding: 16px; background: #f8fafc; color: var(--text-muted); 
+      font-weight: 600; font-size: 0.85rem; text-transform: uppercase; 
+      letter-spacing: 0.5px; border-bottom: 2px solid var(--border); 
     }
-    
-    td { padding: 16px; border-bottom: 1px solid #f1f5f9; color: var(--text-main); vertical-align: middle; }
+    td { padding: 16px; border-bottom: 1px solid #f1f5f9; color: var(--text-main); vertical-align: middle; font-size: 0.9rem;}
     tr:last-child td { border-bottom: none; }
     tr:hover td { background-color: #f8fafc; }
 
     /* BADGES */
     .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-    
-    /* Sesuaikan warna badge dengan screenshot (Process=Kuning, Done=Hijau, Pending=Merah) */
     .done { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
     .process { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
     .pending { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
   
-    /* ACTION LINKS */
     .action-link { text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; margin-right: 5px; display: inline-block; cursor: pointer;}
     .edit-link { background: #e0f2fe; color: #0369a1; }
-    .edit-link:hover { background: #bae6fd; }
     .delete-link { background: #fee2e2; color: #991b1b; }
-    .delete-link:hover { background: #fecaca; }
 
-    /* FORM STYLES */
-    .form-center-container {
-      display: none; /* Hidden by default */
-      justify-content: center;
-      align-items: center;
-      min-height: 100%; 
-      padding: 20px;
+    /* --- FORM MODAL (SESUAI GAMBAR KEDUA) --- */
+    .modal-container {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+      z-index: 100; justify-content: center; align-items: center;
     }
 
-    .form-card {
-      width: 100%;
-      max-width: 450px; 
-      background: white;
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--border);
+    .modal-card {
+      background: white; width: 100%; max-width: 500px; border-radius: 16px;
+      padding: 40px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      animation: popIn 0.2s ease-out;
     }
 
-    .form-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 25px;
-      text-align: center;
-    }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
+    .form-title { font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 25px; text-align: left; }
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #475569; font-size: 0.9rem; }
     .form-group input, .form-group select {
       width: 100%; padding: 12px 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; color: var(--text-main); transition: all 0.3s; background-color: #f8fafc;
     }
-    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); background-color: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); background-color: white; }
 
-    /* BUTTONS FORM */
-    .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; text-align: center; text-decoration: none; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
-    .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2); }
-    .btn-secondary { background: #e2e8f0; color: #475569; margin-top: 10px; }
-    .btn-secondary:hover { background: #cbd5e1; }
+    /* Tombol di Form (Tambah Data Baru = Biru, Batal = Abu) */
+    .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; margin-bottom: 10px; }
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
+    .btn-secondary { background: #e2e8f0; color: #475569; }
+    .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
 
-    /* UTILS */
-    .hidden { display: none !important; }
-    #noDataMessage { text-align: center; padding: 40px; color: #94a3b8; display: none; }
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <h2>🏨 Sistem Maintenance Hotel</h2>
-    <a href="#" onclick="app.navigate('ac')" class="nav-link active" id="nav-ac">AC Problem</a>
-    <a href="#" onclick="app.navigate('jetspray')" class="nav-link" id="nav-jetspray">Jetspray</a>
-    <a href="#" onclick="app.navigate('minibar')" class="nav-link" id="nav-minibar">Minibar</a>
-    <a href="#" onclick="app.navigate('vincard')" class="nav-link" id="nav-vincard">Vincard</a>
+  <!-- 1. LOGIN VIEW -->
+  <div id="loginView">
+    <div class="login-card">
+      <div class="login-logo">🏨</div>
+      <h1 class="login-title">Sistem Maintenance</h1>
+      <p class="login-subtitle">Silakan login untuk mengakses dashboard.</p>
+      <form onsubmit="app.login(event)">
+        <div class="form-group" style="text-align: left;">
+          <label>Username</label><input type="text" id="username" placeholder="admin" required>
+        </div>
+        <div class="form-group" style="text-align: left;">
+          <label>Password</label><input type="password" id="password" placeholder="admin" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login Dashboard</button>
+      </form>
+      <p style="margin-top: 15px; font-size: 0.8rem; color: #94a3b8;">Gunakan: admin / admin</p>
+    </div>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <div class="main">
+  <!-- 2. APP VIEW (Main Dashboard) -->
+  <div id="appView" style="display: none;">
     
-    <!-- LIST VIEW -->
-    <div id="listView" class="content-wrapper">
-      <div class="card">
-        <div class="header-flex">
-          <div class="page-title">
-            <h2 id="pageTitle">AC Problem</h2>
-            <p>Kelola data kerusakan dengan mudah.</p>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <!-- Judul Sesuai Gambar -->
+        <h2>System<br><span>Maintenance Hotel</span></h2>
+      </div>
+      <a href="#" onclick="app.navigate('ac')" class="nav-link active" id="nav-ac">AC Problem</a>
+      <a href="#" onclick="app.navigate('jetspray')" class="nav-link" id="nav-jetspray">Jetspray</a>
+      <a href="#" onclick="app.navigate('minibar')" class="nav-link" id="nav-minibar">Minibar</a>
+      <a href="#" onclick="app.navigate('vincard')" class="nav-link" id="nav-vincard">Vincard</a>
+      <a href="#" onclick="app.logout()" class="nav-link logout-btn">🚪 Logout</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <!-- A. LIST VIEW -->
+      <div id="listView" class="content-wrapper">
+        <div class="card">
+          <div class="header-flex">
+            <div class="page-title">
+              <h2 id="pageTitle">AC Problem</h2>
+              <p>Kelola data kerusakan dengan mudah.</p>
+            </div>
+            <button onclick="app.openFormModal()" class="add-btn-inline">+ Tambah Data</button>
           </div>
-          <!-- Tombol Hijau Sesuai Request -->
-          <button onclick="app.showForm()" class="add-btn-inline">+ Tambah Data</button>
-        </div>
 
-        <div class="search-box">
-          <input type="text" id="searchInput" placeholder="Cari kode, lokasi, kerusakan..." onkeyup="app.filterTable()">
-        </div>
-
-        <div id="noDataMessage">Data tidak ditemukan.</div>
-
-        <table id="myTable">
-          <thead>
-            <tr>
-              <th>KODE</th>
-              <th>LOKASI</th>
-              <th>KERUSAKAN</th>
-              <th>TANGGAL</th>
-              <th>STATUS</th>
-              <th>TEKNISI</th>
-              <th>AKSI</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <!-- Data injected here -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- FORM VIEW -->
-    <div id="formView" class="form-center-container">
-      <div class="form-card">
-        <h2 class="form-title" id="formTitle">Tambah Data Baru</h2>
-        <form id="maintenanceForm" onsubmit="app.handleFormSubmit(event)">
-          <input type="hidden" id="editId">
-          <div class="form-group"><label>Kode / ID</label><input type="text" id="kode" name="kode" required autocomplete="off"></div>
-          <div class="form-group"><label>Lokasi</label><input type="text" id="lokasi" name="lokasi" required autocomplete="off"></div>
-          <div class="form-group"><label>Kerusakan</label><input type="text" id="kerusakan" name="kerusakan" required autocomplete="off"></div>
-          <div class="form-group"><label>Tanggal Lapor</label><input type="date" id="tanggal_lapor" name="tanggal_lapor" required></div>
-          <div class="form-group"><label>Status</label>
-            <select id="status" name="status">
-              <option value="Process">Process</option>
-              <option value="Done">Done</option>
-              <option value="Pending">Pending</option>
-            </select>
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Cari kode, lokasi, kerusakan..." onkeyup="app.filterTable()">
           </div>
-          <div class="form-group"><label>Nama Teknisi</label><input type="text" id="teknisi" name="teknisi" required autocomplete="off"></div>
-          <button type="submit" class="btn btn-primary">💾 Simpan Data</button>
-          <a href="#" onclick="app.navigate(app.currentType)" class="btn btn-secondary">Batal</a>
-        </form>
+
+          <div id="noDataMessage" class="hidden" style="text-align: center; padding: 20px; color: #94a3b8;">Tidak ada data.</div>
+
+          <table id="myTable">
+            <thead>
+              <tr>
+                <th>KODE</th>
+                <th>LOKASI</th>
+                <th>KERUSAKAN</th>
+                <th>TANGGAL</th>
+                <th>STATUS</th>
+                <th>TEKNISI</th>
+                <th>AKSI</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- DELETE VIEW -->
-    <div id="deleteView" class="form-center-container">
-      <div class="form-card" style="border-top: 5px solid #ef4444; text-align: center;">
-        <div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
-        <h2 class="form-title" style="color: #ef4444;">Hapus Data?</h2>
-        <p style="color: #64748b; margin-bottom: 25px;">Tindakan ini tidak dapat dibatalkan.</p>
-        <form onsubmit="app.confirmDelete(event)">
-          <input type="hidden" id="deleteId">
-          <button type="submit" class="btn btn-danger">Ya, Hapus Permanen</button>
-          <a href="#" onclick="app.navigate(app.currentType)" class="btn btn-secondary">Batal</a>
-        </form>
-      </div>
+  <!-- 3. FORM MODAL (Sesuai Gambar 2) -->
+  <div id="formModal" class="modal-container">
+    <div class="modal-card">
+      <!-- Judul Form Sesuai Gambar -->
+      <h2 class="form-title" id="formTitle">Tambah Data AC</h2>
+      <form onsubmit="app.handleFormSubmit(event)">
+        <input type="hidden" id="editId">
+        <div class="form-group"><label>Kode / ID</label><input type="text" id="kode" name="kode" required autocomplete="off"></div>
+        <div class="form-group"><label>Lokasi</label><input type="text" id="lokasi" name="lokasi" required autocomplete="off"></div>
+        <div class="form-group"><label>Kerusakan</label><input type="text" id="kerusakan" name="kerusakan" required autocomplete="off"></div>
+        <div class="form-group"><label>Tanggal Lapor</label><input type="date" id="tanggal_lapor" name="tanggal_lapor" required></div>
+        <div class="form-group"><label>Status</label>
+          <select id="status" name="status">
+            <option value="Process">Process (Sedang Dikerjakan)</option>
+            <option value="Done">Done</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Nama Teknisi</label><input type="text" id="teknisi" name="teknisi" required autocomplete="off"></div>
+        
+        <!-- Tombol Sesuai Gambar -->
+        <button type="submit" class="btn btn-primary">Tambah Data Baru</button>
+        <button type="button" onclick="app.closeModals()" class="btn btn-secondary">Batal</button>
+      </form>
     </div>
+  </div>
 
+  <!-- 4. DELETE MODAL -->
+  <div id="deleteModal" class="modal-container">
+    <div class="modal-card" style="border-top: 5px solid #ef4444; text-align: center;">
+      <div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
+      <h2 class="form-title" style="color: #ef4444;">Hapus Data?</h2>
+      <p style="color: #64748b; margin-bottom: 25px;">Tindakan ini tidak dapat dibatalkan.</p>
+      <form onsubmit="app.confirmDelete(event)">
+        <input type="hidden" id="deleteId">
+        <button type="submit" class="btn btn-danger">Ya, Hapus Permanen</button>
+        <button type="button" onclick="app.closeModals()" class="btn btn-secondary">Batal</button>
+      </form>
+    </div>
   </div>
 
   <script>
-    // --- DATA STORE & SEEDING (Data Awal) ---
-    const DB_KEY = "hotel_maintenance_db";
+    // --- DATA STORE ---
+    const DB_KEY = "hotel_maintenance_db_v2";
+    const AUTH_KEY = "hotel_auth_status";
 
     const store = {
       get: () => {
         const data = localStorage.getItem(DB_KEY);
-        // Jika belum ada data, isi dengan data dummy sesuai screenshot
         if (!data) {
+          // Data Dummy Sesuai Gambar
           const initialData = {
             ac: [
-              { _id: "1", kode: "AC-101", lokasi: "Room 101", kerusakan: "Tidak dingin", tanggal_lapor: "2023-10-25", status: "Process", teknisi: { nama: "Budi Santoso" } },
-              { _id: "2", kode: "AC-202", lokasi: "Room 202", kerusakan: "Bocor air", tanggal_lapor: "2023-10-24", status: "Done", teknisi: { nama: "Agus Setiawan" } },
-              { _id: "3", kode: "AC-L01", lokasi: "Lobby", kerusakan: "Bunyi kasar", tanggal_lapor: "2023-10-23", status: "Pending", teknisi: { nama: "-" } },
-              { _id: "4", kode: "AC-303", lokasi: "Room 303", kerusakan: "Remote error", tanggal_lapor: "2023-10-22", status: "Process", teknisi: { nama: "Dedi Corbuzier" } }
+              { _id: "1", kode: "M008", lokasi: "Kamar 820", kerusakan: "AC tidak dingin", tanggal_lapor: "2026-04-10", status: "Done", teknisi: { nama: "Budi" } },
+              { _id: "2", kode: "M009", lokasi: "Lobby", kerusakan: "Bocor", tanggal_lapor: "2026-04-11", status: "Process", teknisi: { nama: "Agus" } },
+              { _id: "3", kode: "M010", lokasi: "Kamar 101", kerusakan: "Remote error", tanggal_lapor: "2026-04-09", status: "Pending", teknisi: { nama: "-" } },
+              { _id: "4", kode: "M011", lokasi: "Restoran", kerusakan: "Bunyi kasar", tanggal_lapor: "2026-04-12", status: "Done", teknisi: { nama: "Dedi" } }
             ],
-            jetspray: [],
-            minibar: [],
-            vincard: []
+            jetspray: [], minibar: [], vincard: []
           };
           localStorage.setItem(DB_KEY, JSON.stringify(initialData));
           return initialData;
         }
         return JSON.parse(data);
       },
-      save: (data) => {
-        localStorage.setItem(DB_KEY, JSON.stringify(data));
-      }
+      save: (data) => localStorage.setItem(DB_KEY, JSON.stringify(data))
     };
 
     // --- APP LOGIC ---
@@ -358,43 +308,41 @@
       currentType: 'ac',
 
       init: () => {
-        app.navigate('ac');
+        if (localStorage.getItem(AUTH_KEY) === 'true') app.showApp();
+        else app.showLogin();
       },
+
+      login: (e) => {
+        e.preventDefault();
+        const u = document.getElementById('username').value;
+        const p = document.getElementById('password').value;
+        if (u === 'admin' && p === 'admin') {
+          localStorage.setItem(AUTH_KEY, 'true');
+          app.showApp();
+        } else alert("Username/Password salah (Coba: admin/admin)");
+      },
+      logout: () => { if(confirm("Keluar?")) { localStorage.removeItem(AUTH_KEY); app.showLogin(); } },
+      showLogin: () => { document.getElementById('loginView').style.display = 'flex'; document.getElementById('appView').style.display = 'none'; },
+      showApp: () => { document.getElementById('loginView').style.display = 'none'; document.getElementById('appView').style.display = 'flex'; app.navigate('ac'); },
 
       navigate: (type) => {
         app.currentType = type;
-        
-        // Update Sidebar
         document.querySelectorAll('.sidebar a').forEach(el => el.classList.remove('active'));
-        document.getElementById(`nav-${type}`).classList.add('active');
-
-        // Set Title
-        const titles = {
-          'ac': 'AC Problem',
-          'jetspray': 'Jetspray Problem',
-          'minibar': 'Minibar Problem',
-          'vincard': 'Vincard Problem'
-        };
+        document.getElementById(`nav-${type}`)?.classList.add('active');
+        const titles = { 'ac': 'AC Problem', 'jetspray': 'Jetspray Problem', 'minibar': 'Minibar Problem', 'vincard': 'Vincard Problem' };
         document.getElementById('pageTitle').innerText = titles[type];
-
-        // Reset Views
+        app.closeModals();
         document.getElementById('listView').classList.remove('hidden');
-        document.getElementById('formView').style.display = 'none';
-        document.getElementById('deleteView').style.display = 'none';
-
         app.renderTable();
       },
 
-      showForm: (editData = null) => {
-        document.getElementById('listView').classList.add('hidden');
-        document.getElementById('deleteView').style.display = 'none';
-        document.getElementById('formView').style.display = 'flex';
-
-        const form = document.getElementById('maintenanceForm');
+      openFormModal: (editData = null) => {
+        app.closeModals();
+        const modal = document.getElementById('formModal');
         const title = document.getElementById('formTitle');
 
         if (editData) {
-          title.innerText = `Edit Data ${app.currentType.toUpperCase()}`;
+          title.innerText = `Edit Data`;
           document.getElementById('editId').value = editData._id;
           document.getElementById('kode').value = editData.kode;
           document.getElementById('lokasi').value = editData.lokasi;
@@ -403,49 +351,37 @@
           document.getElementById('status').value = editData.status;
           document.getElementById('teknisi').value = editData.teknisi.nama;
         } else {
-          title.innerText = `Tambah Data ${app.currentType.toUpperCase()}`;
-          form.reset();
+          title.innerText = `Tambah Data AC`; // Judul default
+          document.querySelector('#formModal form').reset();
           document.getElementById('editId').value = "";
           document.getElementById('tanggal_lapor').valueAsDate = new Date();
         }
+        modal.style.display = 'flex';
       },
 
-      showDeleteConfirm: (id) => {
-        document.getElementById('listView').classList.add('hidden');
-        document.getElementById('formView').style.display = 'none';
-        document.getElementById('deleteView').style.display = 'flex';
-        document.getElementById('deleteId').value = id;
-      },
+      openDeleteModal: (id) => { app.closeModals(); document.getElementById('deleteId').value = id; document.getElementById('deleteModal').style.display = 'flex'; },
+      closeModals: () => { document.getElementById('formModal').style.display = 'none'; document.getElementById('deleteModal').style.display = 'none'; },
 
       handleFormSubmit: (e) => {
         e.preventDefault();
         const db = store.get();
         const collection = db[app.currentType];
-        
         const formData = {
-          kode: document.getElementById('kode').value,
-          lokasi: document.getElementById('lokasi').value,
-          kerusakan: document.getElementById('kerusakan').value,
-          tanggal_lapor: document.getElementById('tanggal_lapor').value,
-          status: document.getElementById('status').value,
-          teknisi: { nama: document.getElementById('teknisi').value }
+          kode: document.getElementById('kode').value, lokasi: document.getElementById('lokasi').value,
+          kerusakan: document.getElementById('kerusakan').value, tanggal_lapor: document.getElementById('tanggal_lapor').value,
+          status: document.getElementById('status').value, teknisi: { nama: document.getElementById('teknisi').value }
         };
-
         const editId = document.getElementById('editId').value;
-
         if (editId) {
           const index = collection.findIndex(item => item._id == editId);
-          if (index !== -1) {
-            collection[index] = { ...collection[index], ...formData, _id: editId };
-          }
+          if (index !== -1) collection[index] = { ...collection[index], ...formData, _id: editId };
         } else {
-          const newId = Date.now().toString();
-          collection.push({ _id: newId, ...formData });
+          collection.push({ _id: Date.now().toString(), ...formData });
         }
-
         db[app.currentType] = collection;
         store.save(db);
-        app.navigate(app.currentType);
+        app.closeModals();
+        app.renderTable();
       },
 
       confirmDelete: (e) => {
@@ -454,7 +390,8 @@
         const db = store.get();
         db[app.currentType] = db[app.currentType].filter(item => item._id != id);
         store.save(db);
-        app.navigate(app.currentType);
+        app.closeModals();
+        app.renderTable();
       },
 
       renderTable: () => {
@@ -462,17 +399,10 @@
         const data = db[app.currentType] || [];
         const tbody = document.getElementById('tableBody');
         const noData = document.getElementById('noDataMessage');
-
         tbody.innerHTML = '';
-        
-        // Sort terbaru diatas
         data.sort((a,b) => b._id.localeCompare(a._id));
-
-        if (data.length === 0) {
-          noData.style.display = 'block';
-          return;
-        }
-        noData.style.display = 'none';
+        if (data.length === 0) { noData.classList.remove('hidden'); return; }
+        noData.classList.add('hidden');
 
         data.forEach(item => {
           let statusClass = "process";
@@ -485,38 +415,28 @@
             <td style="font-weight:500;">${item.lokasi}</td>
             <td>${item.kerusakan}</td>
             <td>${item.tanggal_lapor}</td>
-            <td><span class="badge ${statusClass}">${item.status}</span></td>
+            <td><span class="badge ${statusClass}">${item.status.toUpperCase()}</span></td>
             <td>${item.teknisi.nama}</td>
             <td>
-              <span onclick="app.editItem('${item._id}')" class="action-link edit-link">Edit</span>
-              <span onclick="app.showDeleteConfirm('${item._id}')" class="action-link delete-link">Hapus</span>
+              <span onclick="app.openFormModal(app.getDataById('${item._id}'))" class="action-link edit-link">Edit</span>
+              <span onclick="app.openDeleteModal('${item._id}')" class="action-link delete-link">Hapus</span>
             </td>
           `;
           tbody.appendChild(tr);
         });
       },
 
-      editItem: (id) => {
-        const db = store.get();
-        const item = db[app.currentType].find(i => i._id == id);
-        if (item) app.showForm(item);
-      },
+      getDataById: (id) => store.get()[app.currentType].find(i => i._id == id),
 
       filterTable: () => {
         const input = document.getElementById("searchInput");
         const filter = input.value.toUpperCase();
-        const table = document.getElementById("myTable");
-        const tr = table.getElementsByTagName("tr");
+        const tr = document.getElementById("myTable").getElementsByTagName("tr");
         let hasVisibleRow = false;
-
         for (let i = 1; i < tr.length; i++) {
           let tds = tr[i].getElementsByTagName("td");
           let match = false;
-          for(let j=0; j<tds.length; j++){
-            if(tds[j].textContent.toUpperCase().indexOf(filter) > -1) {
-              match = true; break;
-            }
-          }
+          for(let j=0; j<tds.length; j++){ if(tds[j].textContent.toUpperCase().indexOf(filter) > -1) { match = true; break; } }
           tr[i].style.display = match ? "" : "none";
           if(match) hasVisibleRow = true;
         }
