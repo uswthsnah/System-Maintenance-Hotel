@@ -1,311 +1,530 @@
-;">Aksi</th>
-</tr>
-</thead>
-<tbody id="tableBody">
-<!-- Data will be injected here -->
-</tbody>
-</table>
-<div id="emptyState" class="empty-state hidden">
-Belum ada data. Silakan tambah data baru.
-</div>
-</div>
-</div>
-</div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Maintenance Hotel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* --- CSS STYLE --- */
+    :root {
+      --primary: #3b82f6;
+      --secondary: #0f172a; /* Warna Sidebar */
+      --bg-body: #f1f5f9;
+      --bg-card: #ffffff;
+      --text-main: #334155;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --green: #10b981; /* Warna tombol tambah */
+      --red: #ef4444;
+    }
 
-<!-- FORM VIEW -->
-<div id="formView" class="form-view-container">
-<div class="form-card">
-<h2 class="form-title" id="formTitle">Tambah Data Baru</h2>
-<form id="maintenanceForm" onsubmit="app.handleFormSubmit(event)">
-<input type="hidden" id="editId">
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    
+    body { 
+      display: flex; 
+      background-color: var(--bg-body); 
+      height: 100vh;
+      overflow: hidden;
+      color: var(--text-main);
+    }
 
-<div class="form-group">
-<label>Kode / ID</label>
-<input type="text" id="kode" name="kode" required autocomplete="off" placeholder="Contoh: AC-101">
-</div>
+    /* SIDEBAR */
+    .sidebar {
+      width: 260px;
+      background: var(--secondary); 
+      color: white;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    }
 
-<div class="form-group">
-<label>Lokasi</label>
-<input type="text" id="lokasi" name="lokasi" required autocomplete="off" placeholder="Contoh: Room 301">
-</div>
+    .sidebar h2 { 
+      margin-bottom: 30px; 
+      font-size: 1.2rem; 
+      font-weight: 700;
+      color: #38bdf8; /* Warna teks title biru muda */
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-<div class="form-group">
-<label>Kerusakan</label>
-<input type="text" id="kerusakan" name="kerusakan" required autocomplete="off" placeholder="Contoh: Tidak dingin">
-</div>
+    .sidebar a {
+      display:block;
+      color:#94a3b8; 
+      text-decoration:none;
+      margin: 8px 0;
+      padding: 12px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
 
-<div class="form-group">
-<label>Tanggal Lapor</label>
-<input type="date" id="tanggal_lapor" name="tanggal_lapor" required>
-</div>
+    .sidebar a:hover, .sidebar a.active {
+      background: #1e293b;
+      color: white;
+      transform: translateX(5px);
+    }
 
-<div class="form-group">
-<label>Status</label>
-<select id="status" name="status">
-<option value="Process">Process (Sedang Dikerjakan)</option>
-<option value="Done">Done (Selesai)</option>
-<option value="Pending">Pending (Menunggu)</option>
-</select>
-</div>
+    /* MAIN CONTENT */
+    .main { 
+      flex:1; 
+      padding: 0; 
+      overflow-y: auto; 
+      position: relative;
+    }
 
-<div class="form-group">
-<label>Nama Teknisi</label>
-<input type="text" id="teknisi" name="teknisi" required autocomplete="off" placeholder="Nama teknisi">
-</div>
+    .content-wrapper {
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-<div style="display: flex; gap: 10px; margin-top: 30px;">
-<button type="submit" class="btn btn-primary" style="flex: 1;">💾 Simpan Data</button>
-<button type="button" onclick="app.navigate(app.currentType)" class="btn btn-secondary">Batal</button>
-</div>
-</form>
-</div>
-</div>
+    /* CARD */
+    .card {
+      background:white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+    }
 
-<!-- DELETE CONFIRMATION VIEW -->
-<div id="deleteView" class="form-view-container">
-<div class="form-card" style="border-top: 5px solid var(--danger); text-align: center;">
-<div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
-<h2 class="form-title" style="color: var(--danger);">Hapus Data?</h2>
-<p style="color: var(--text-muted); margin-bottom: 25px;">Tindakan ini akan menghapus data secara permanen dan tidak dapat dikembalikan.</p>
+    /* HEADER & BUTTONS */
+    .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    
+    .page-title h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .page-title p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
 
-<form onsubmit="app.confirmDelete(event)">
-<input type="hidden" id="deleteId">
-<button type="submit" class="btn btn-danger" style="width: 100%; margin-bottom: 10px;">Ya, Hapus Permanen</button>
-<button type="button" onclick="app.navigate(app.currentType)" class="btn btn-secondary" style="width: 100%;">Batal</button>
-</form>
-</div>
-</div> </main>
+    /* Tombol Hijau (Sesuai Screenshot) */
+    .add-btn-inline { 
+      display: inline-block; 
+      padding: 10px 20px; 
+      background: var(--green); 
+      color: white; 
+      border-radius: 8px; 
+      text-decoration: none; 
+      font-weight: 600; 
+      font-size: 0.9rem; 
+      box-shadow: 0 2px 5px rgba(16, 185, 129, 0.2); 
+      cursor: pointer;
+      border: none;
+    }
+    .add-btn-inline:hover { background: #059669; }
 
-<!-- TOAST NOTIFICATION -->
-<div id="toast">Notifikasi</div>
+    /* SEARCH BAR */
+    .search-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 14px 15px 14px 45px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background: #f8fafc;
+      transition: all 0.3s;
+    }
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.5;
+    }
 
-<script>
-// --- DATA STORE (Mock Database) ---
-const DB_KEY = "hotel_maintenance_db";
+    /* TABLE */
+    table { width:100%; border-collapse:collapse; margin-top: 10px; }
+    
+    /* HEADER TABEL HURUF BESAR (Sesuai Screenshot) */
+    th { 
+      text-align: left; 
+      padding: 16px; 
+      background: #f8fafc; 
+      color: var(--text-muted); 
+      font-weight: 600; 
+      font-size: 0.85rem; 
+      text-transform: uppercase; /* Ini membuat huruf besar */
+      letter-spacing: 0.5px; 
+      border-bottom: 2px solid var(--border); 
+    }
+    
+    td { padding: 16px; border-bottom: 1px solid #f1f5f9; color: var(--text-main); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: #f8fafc; }
 
-// Helper untuk load/save ke LocalStorage
-const store = {
-get: () => {
-const data = localStorage.getItem(DB_KEY);
-return data ? JSON.parse(data) : { ac: [], jetspray: [], minibar: [], vincard: [] };
-},
-save: (data) => {
-localStorage.setItem(DB_KEY, JSON.stringify(data));
-}
-};
+    /* BADGES */
+    .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    
+    /* Sesuaikan warna badge dengan screenshot (Process=Kuning, Done=Hijau, Pending=Merah) */
+    .done { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .process { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+    .pending { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+  
+    /* ACTION LINKS */
+    .action-link { text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; margin-right: 5px; display: inline-block; cursor: pointer;}
+    .edit-link { background: #e0f2fe; color: #0369a1; }
+    .edit-link:hover { background: #bae6fd; }
+    .delete-link { background: #fee2e2; color: #991b1b; }
+    .delete-link:hover { background: #fecaca; }
 
-// --- APP LOGIC ---
-const app = {
-currentType: 'ac', // default view
+    /* FORM STYLES */
+    .form-center-container {
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      min-height: 100%; 
+      padding: 20px;
+    }
 
-init: () => {
-app.navigate('ac');
-},
+    .form-card {
+      width: 100%;
+      max-width: 450px; 
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border);
+    }
 
-// Navigation Switcher
-navigate: (type) => {
-app.currentType = type;
+    .form-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 25px;
+      text-align: center;
+    }
 
-// Update Sidebar UI
-document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-document.getElementById(`nav-${type}`).classList.add('active');
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #475569; font-size: 0.9rem; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 12px 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; color: var(--text-main); transition: all 0.3s; background-color: #f8fafc;
+    }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); background-color: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
 
-// Set Title
-const titles = {
-'ac': 'AC Problem',
-'jetspray': 'Jetspray Issue',
-'minibar': 'Minibar Issue',
-'vincard': 'Vincard Issue'
-};
-document.getElementById('pageTitle').innerText = titles[type];
+    /* BUTTONS FORM */
+    .btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; text-align: center; text-decoration: none; }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
+    .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2); }
+    .btn-secondary { background: #e2e8f0; color: #475569; margin-top: 10px; }
+    .btn-secondary:hover { background: #cbd5e1; }
 
-// Reset Views
-app.showListView();
-app.renderTable();
-},
+    /* UTILS */
+    .hidden { display: none !important; }
+    #noDataMessage { text-align: center; padding: 40px; color: #94a3b8; display: none; }
+  </style>
+</head>
+<body>
 
-// Show/Hide Views
-showListView: () => {
-document.getElementById('listView').classList.remove('hidden');
-document.getElementById('formView').style.display = 'none';
-document.getElementById('deleteView').style.display = 'none';
-},
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>🏨 Sistem Maintenance Hotel</h2>
+    <a href="#" onclick="app.navigate('ac')" class="nav-link active" id="nav-ac">AC Problem</a>
+    <a href="#" onclick="app.navigate('jetspray')" class="nav-link" id="nav-jetspray">Jetspray</a>
+    <a href="#" onclick="app.navigate('minibar')" class="nav-link" id="nav-minibar">Minibar</a>
+    <a href="#" onclick="app.navigate('vincard')" class="nav-link" id="nav-vincard">Vincard</a>
+  </div>
 
-showForm: (editData = null) => {
-document.getElementById('listView').classList.add('hidden');
-document.getElementById('deleteView').style.display = 'none';
-document.getElementById('formView').style.display = 'flex';
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    
+    <!-- LIST VIEW -->
+    <div id="listView" class="content-wrapper">
+      <div class="card">
+        <div class="header-flex">
+          <div class="page-title">
+            <h2 id="pageTitle">AC Problem</h2>
+            <p>Kelola data kerusakan dengan mudah.</p>
+          </div>
+          <!-- Tombol Hijau Sesuai Request -->
+          <button onclick="app.showForm()" class="add-btn-inline">+ Tambah Data</button>
+        </div>
 
-const form = document.getElementById('maintenanceForm');
-const title = document.getElementById('formTitle');
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Cari kode, lokasi, kerusakan..." onkeyup="app.filterTable()">
+        </div>
 
-if (editData) {
-title.innerText = `Edit Data ${app.currentType.toUpperCase()}`;
-document.getElementById('editId').value = editData._id;
-document.getElementById('kode').value = editData.kode;
-document.getElementById('lokasi').value = editData.lokasi;
-document.getElementById('kerusakan').value = editData.kerusakan;
-document.getElementById('tanggal_lapor').value = editData.tanggal_lapor;
-document.getElementById('status').value = editData.status;
-document.getElementById('teknisi').value = editData.teknisi.nama;
-} else {
-title.innerText = `Tambah Data ${app.currentType.toUpperCase()}`;
-form.reset();
-document.getElementById('editId').value = "";
-// Set default date to today
-document.getElementById('tanggal_lapor').valueAsDate = new Date();
-}
-},
+        <div id="noDataMessage">Data tidak ditemukan.</div>
 
-showDeleteConfirm: (id) => {
-document.getElementById('listView').classList.add('hidden');
-document.getElementById('formView').style.display = 'none';
-document.getElementById('deleteView').style.display = 'flex';
-document.getElementById('deleteId').value = id;
-},
+        <table id="myTable">
+          <thead>
+            <tr>
+              <th>KODE</th>
+              <th>LOKASI</th>
+              <th>KERUSAKAN</th>
+              <th>TANGGAL</th>
+              <th>STATUS</th>
+              <th>TEKNISI</th>
+              <th>AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Data injected here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-// CRUD Operations
-handleFormSubmit: (e) => {
-e.preventDefault();
-const db = store.get();
-const collection = db[app.currentType];
+    <!-- FORM VIEW -->
+    <div id="formView" class="form-center-container">
+      <div class="form-card">
+        <h2 class="form-title" id="formTitle">Tambah Data Baru</h2>
+        <form id="maintenanceForm" onsubmit="app.handleFormSubmit(event)">
+          <input type="hidden" id="editId">
+          <div class="form-group"><label>Kode / ID</label><input type="text" id="kode" name="kode" required autocomplete="off"></div>
+          <div class="form-group"><label>Lokasi</label><input type="text" id="lokasi" name="lokasi" required autocomplete="off"></div>
+          <div class="form-group"><label>Kerusakan</label><input type="text" id="kerusakan" name="kerusakan" required autocomplete="off"></div>
+          <div class="form-group"><label>Tanggal Lapor</label><input type="date" id="tanggal_lapor" name="tanggal_lapor" required></div>
+          <div class="form-group"><label>Status</label>
+            <select id="status" name="status">
+              <option value="Process">Process</option>
+              <option value="Done">Done</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Nama Teknisi</label><input type="text" id="teknisi" name="teknisi" required autocomplete="off"></div>
+          <button type="submit" class="btn btn-primary">💾 Simpan Data</button>
+          <a href="#" onclick="app.navigate(app.currentType)" class="btn btn-secondary">Batal</a>
+        </form>
+      </div>
+    </div>
 
-const formData = {
-kode: document.getElementById('kode').value,
-lokasi: document.getElementById('lokasi').value,
-kerusakan: document.getElementById('kerusakan').value,
-tanggal_lapor: document.getElementById('tanggal_lapor').value,
-status: document.getElementById('status').value,
-teknisi: { nama: document.getElementById('teknisi').value }
-};
+    <!-- DELETE VIEW -->
+    <div id="deleteView" class="form-center-container">
+      <div class="form-card" style="border-top: 5px solid #ef4444; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
+        <h2 class="form-title" style="color: #ef4444;">Hapus Data?</h2>
+        <p style="color: #64748b; margin-bottom: 25px;">Tindakan ini tidak dapat dibatalkan.</p>
+        <form onsubmit="app.confirmDelete(event)">
+          <input type="hidden" id="deleteId">
+          <button type="submit" class="btn btn-danger">Ya, Hapus Permanen</button>
+          <a href="#" onclick="app.navigate(app.currentType)" class="btn btn-secondary">Batal</a>
+        </form>
+      </div>
+    </div>
 
-const editId = document.getElementById('editId').value;
+  </div>
 
-if (editId) {
-// Update
-const index = collection.findIndex(item => item._id == editId);
-if (index !== -1) {
-collection[index] = { ...collection[index], ...formData, _id: editId };
-app.showToast("Data berhasil diperbarui!", "success");
-}
-} else {
-// Create
-const newId = Date.now().toString(); // Simple ID generation
-collection.push({ _id: newId, ...formData });
-app.showToast("Data baru berhasil ditambahkan!", "success");
-}
+  <script>
+    // --- DATA STORE & SEEDING (Data Awal) ---
+    const DB_KEY = "hotel_maintenance_db";
 
-db[app.currentType] = collection;
-store.save(db);
-app.navigate(app.currentType);
-},
+    const store = {
+      get: () => {
+        const data = localStorage.getItem(DB_KEY);
+        // Jika belum ada data, isi dengan data dummy sesuai screenshot
+        if (!data) {
+          const initialData = {
+            ac: [
+              { _id: "1", kode: "AC-101", lokasi: "Room 101", kerusakan: "Tidak dingin", tanggal_lapor: "2023-10-25", status: "Process", teknisi: { nama: "Budi Santoso" } },
+              { _id: "2", kode: "AC-202", lokasi: "Room 202", kerusakan: "Bocor air", tanggal_lapor: "2023-10-24", status: "Done", teknisi: { nama: "Agus Setiawan" } },
+              { _id: "3", kode: "AC-L01", lokasi: "Lobby", kerusakan: "Bunyi kasar", tanggal_lapor: "2023-10-23", status: "Pending", teknisi: { nama: "-" } },
+              { _id: "4", kode: "AC-303", lokasi: "Room 303", kerusakan: "Remote error", tanggal_lapor: "2023-10-22", status: "Process", teknisi: { nama: "Dedi Corbuzier" } }
+            ],
+            jetspray: [],
+            minibar: [],
+            vincard: []
+          };
+          localStorage.setItem(DB_KEY, JSON.stringify(initialData));
+          return initialData;
+        }
+        return JSON.parse(data);
+      },
+      save: (data) => {
+        localStorage.setItem(DB_KEY, JSON.stringify(data));
+      }
+    };
 
-editItem: (id) => {
-const db = store.get();
-const item = db[app.currentType].find(i => i._id == id);
-if (item) app.showForm(item);
-},
+    // --- APP LOGIC ---
+    const app = {
+      currentType: 'ac',
 
-confirmDelete: (e) => {
-e.preventDefault();
-const id = document.getElementById('deleteId').value;
-const db = store.get();
+      init: () => {
+        app.navigate('ac');
+      },
 
-db[app.currentType] = db[app.currentType].filter(item => item._id != id);
-store.save(db);
+      navigate: (type) => {
+        app.currentType = type;
+        
+        // Update Sidebar
+        document.querySelectorAll('.sidebar a').forEach(el => el.classList.remove('active'));
+        document.getElementById(`nav-${type}`).classList.add('active');
 
-app.showToast("Data berhasil dihapus.", "error");
-app.navigate(app.currentType);
-},
+        // Set Title
+        const titles = {
+          'ac': 'AC Problem',
+          'jetspray': 'Jetspray Problem',
+          'minibar': 'Minibar Problem',
+          'vincard': 'Vincard Problem'
+        };
+        document.getElementById('pageTitle').innerText = titles[type];
 
-// Rendering
-renderTable: () => {
-const db = store.get();
-const data = db[app.currentType] || [];
-const tbody = document.getElementById('tableBody');
-const emptyState = document.getElementById('emptyState');
+        // Reset Views
+        document.getElementById('listView').classList.remove('hidden');
+        document.getElementById('formView').style.display = 'none';
+        document.getElementById('deleteView').style.display = 'none';
 
-tbody.innerHTML = '';
+        app.renderTable();
+      },
 
-if (data.length === 0) {
-emptyState.classList.remove('hidden');
-return;
-} else {
-emptyState.classList.add('hidden');
-}
+      showForm: (editData = null) => {
+        document.getElementById('listView').classList.add('hidden');
+        document.getElementById('deleteView').style.display = 'none';
+        document.getElementById('formView').style.display = 'flex';
 
-// Sort by newest (based on ID timestamp)
-const sortedData = data.sort((a, b) => b._id.localeCompare(a._id));
+        const form = document.getElementById('maintenanceForm');
+        const title = document.getElementById('formTitle');
 
-sortedData.forEach(item => {
-let statusClass = 'badge-process';
-if (item.status === 'Done') statusClass = 'badge-done';
-if (item.status === 'Pending') statusClass = 'badge-pending';
+        if (editData) {
+          title.innerText = `Edit Data ${app.currentType.toUpperCase()}`;
+          document.getElementById('editId').value = editData._id;
+          document.getElementById('kode').value = editData.kode;
+          document.getElementById('lokasi').value = editData.lokasi;
+          document.getElementById('kerusakan').value = editData.kerusakan;
+          document.getElementById('tanggal_lapor').value = editData.tanggal_lapor;
+          document.getElementById('status').value = editData.status;
+          document.getElementById('teknisi').value = editData.teknisi.nama;
+        } else {
+          title.innerText = `Tambah Data ${app.currentType.toUpperCase()}`;
+          form.reset();
+          document.getElementById('editId').value = "";
+          document.getElementById('tanggal_lapor').valueAsDate = new Date();
+        }
+      },
 
-const tr = document.createElement('tr');
-tr.innerHTML = `
-<td><span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:4px; font-size:0.85rem;">${item.kode}</span></td>
-<td style="font-weight:500;">${item.lokasi}</td>
-<td>${item.kerusakan}</td>
-<td>${item.tanggal_lapor}</td>
-<td><span class="badge ${statusClass}">${item.status}</span></td>
-<td>${item.teknisi.nama}</td>
-<td style="text-align: right;">
-<span onclick="app.editItem('${item._id}')" class="action-link edit-link">Edit</span>
-<span onclick="app.showDeleteConfirm('${item._id}')" class="action-link delete-link">Hapus</span>
-</td>
-`;
-tbody.appendChild(tr);
-});
-},
+      showDeleteConfirm: (id) => {
+        document.getElementById('listView').classList.add('hidden');
+        document.getElementById('formView').style.display = 'none';
+        document.getElementById('deleteView').style.display = 'flex';
+        document.getElementById('deleteId').value = id;
+      },
 
-filterTable: () => {
-const input = document.getElementById('searchInput');
-const filter = input.value.toUpperCase();
-const table = document.getElementById('dataTable');
-const tr = table.getElementsByTagName('tr');
+      handleFormSubmit: (e) => {
+        e.preventDefault();
+        const db = store.get();
+        const collection = db[app.currentType];
+        
+        const formData = {
+          kode: document.getElementById('kode').value,
+          lokasi: document.getElementById('lokasi').value,
+          kerusakan: document.getElementById('kerusakan').value,
+          tanggal_lapor: document.getElementById('tanggal_lapor').value,
+          status: document.getElementById('status').value,
+          teknisi: { nama: document.getElementById('teknisi').value }
+        };
 
-let hasVisibleRow = false;
+        const editId = document.getElementById('editId').value;
 
-for (let i = 1; i < tr.length; i++) {
-let tds = tr[i].getElementsByTagName("td");
-let visible = false;
+        if (editId) {
+          const index = collection.findIndex(item => item._id == editId);
+          if (index !== -1) {
+            collection[index] = { ...collection[index], ...formData, _id: editId };
+          }
+        } else {
+          const newId = Date.now().toString();
+          collection.push({ _id: newId, ...formData });
+        }
 
-for(let j=0; j<tds.length; j++){
-if(tds[j].textContent.toUpperCase().indexOf(filter) > -1){
-visible = true;
-break;
-}
-}
+        db[app.currentType] = collection;
+        store.save(db);
+        app.navigate(app.currentType);
+      },
 
-if(visible) {
-tr[i].classList.remove('hidden-row');
-hasVisibleRow = true;
-} else {
-tr[i].classList.add('hidden-row');
-}
-}
+      confirmDelete: (e) => {
+        e.preventDefault();
+        const id = document.getElementById('deleteId').value;
+        const db = store.get();
+        db[app.currentType] = db[app.currentType].filter(item => item._id != id);
+        store.save(db);
+        app.navigate(app.currentType);
+      },
 
-const emptyState = document.getElementById('emptyState');
-// Jika semua baris terhidden karena filter, dan data asli tidak kosong
-if (!hasVisibleRow && store.get()[app.currentType].length > 0) {
-// Optional: Tampilkan pesan "Tidak ditemukan" khusus filter,
-// tapi untuk simplifikasi kita biarkan kosong atau gunakan logika custom jika perlu.
-// Saat ini table hanya menyembunyikan row.
-}
-},
+      renderTable: () => {
+        const db = store.get();
+        const data = db[app.currentType] || [];
+        const tbody = document.getElementById('tableBody');
+        const noData = document.getElementById('noDataMessage');
 
-showToast: (message, type) => {
-const toast = document.getElementById("toast");
-toast.className = "show " + type;
-toast.innerText = message;
-setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-}
-};
+        tbody.innerHTML = '';
+        
+        // Sort terbaru diatas
+        data.sort((a,b) => b._id.localeCompare(a._id));
 
-// Start App
-document.addEventListener('DOMContentLoaded', app.init);
-</script>
+        if (data.length === 0) {
+          noData.style.display = 'block';
+          return;
+        }
+        noData.style.display = 'none';
+
+        data.forEach(item => {
+          let statusClass = "process";
+          if (item.status === "Done") statusClass = "done";
+          if (item.status === "Pending") statusClass = "pending";
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:4px;">${item.kode}</span></td>
+            <td style="font-weight:500;">${item.lokasi}</td>
+            <td>${item.kerusakan}</td>
+            <td>${item.tanggal_lapor}</td>
+            <td><span class="badge ${statusClass}">${item.status}</span></td>
+            <td>${item.teknisi.nama}</td>
+            <td>
+              <span onclick="app.editItem('${item._id}')" class="action-link edit-link">Edit</span>
+              <span onclick="app.showDeleteConfirm('${item._id}')" class="action-link delete-link">Hapus</span>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      },
+
+      editItem: (id) => {
+        const db = store.get();
+        const item = db[app.currentType].find(i => i._id == id);
+        if (item) app.showForm(item);
+      },
+
+      filterTable: () => {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById("myTable");
+        const tr = table.getElementsByTagName("tr");
+        let hasVisibleRow = false;
+
+        for (let i = 1; i < tr.length; i++) {
+          let tds = tr[i].getElementsByTagName("td");
+          let match = false;
+          for(let j=0; j<tds.length; j++){
+            if(tds[j].textContent.toUpperCase().indexOf(filter) > -1) {
+              match = true; break;
+            }
+          }
+          tr[i].style.display = match ? "" : "none";
+          if(match) hasVisibleRow = true;
+        }
+        document.getElementById("noDataMessage").style.display = hasVisibleRow ? "none" : "block";
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', app.init);
+  </script>
 </body>
 </html>
-```
