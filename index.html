@@ -194,16 +194,13 @@
       <div class="login-logo">🏨</div>
       <h1 class="login-title">Sistem Maintenance</h1>
       <p class="login-subtitle">Silakan login untuk mengakses dashboard.</p>
-      <!-- TAMBAHKAN autocomplete="off" DI FORM -->
       <form onsubmit="app.login(event)" autocomplete="off">
         <div class="form-group" style="text-align: left;">
           <label>Username</label>
-          <!-- TAMBAHKAN autocomplete="off" DI INPUT -->
           <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
         </div>
         <div class="form-group" style="text-align: left;">
           <label>Password</label>
-          <!-- GUNAKAN new-password AGAR BROWSER TIDAK MENYURUH SAVE -->
           <input type="password" id="password" placeholder="Masukkan password" required autocomplete="new-password">
         </div>
         <button type="submit" class="btn btn-primary">Login Dashboard</button>
@@ -291,7 +288,9 @@
           </select>
         </div>
         <div class="form-group"><label>Nama Teknisi</label><input type="text" id="teknisi" name="teknisi" required autocomplete="off"></div>
-        <button type="submit" class="btn btn-primary">Tambah Data Baru</button>
+        
+        <!-- DITAMBAH ID UNTUK MENGUBAH TULISAN SAAT EDIT -->
+        <button type="submit" class="btn btn-primary" id="submitBtn">Tambah Data Baru</button>
         <button type="button" onclick="app.closeModals()" class="btn btn-secondary">Batal</button>
       </form>
     </div>
@@ -411,8 +410,11 @@
         app.closeModals();
         const modal = document.getElementById('formModal');
         const title = document.getElementById('formTitle');
+        const submitBtn = document.getElementById('submitBtn'); // AMBIL TOMBOLNYA
+
         if (editData) {
           title.innerText = `Edit Data`;
+          submitBtn.innerText = `Simpan Perubahan`; // UBAH TULISAN TOMBOL JIKA EDIT
           document.getElementById('editId').value = editData._id;
           document.getElementById('kode').value = editData.kode;
           document.getElementById('lokasi').value = editData.lokasi;
@@ -423,6 +425,7 @@
         } else {
           const displayName = app.currentType.replace(/_/g, ' ').toUpperCase();
           title.innerText = `Tambah Data ${displayName}`;
+          submitBtn.innerText = `Tambah Data Baru`; // TULISAN TOMBOL SAAT TAMBAH BARU
           document.querySelector('#formModal form').reset();
           document.getElementById('editId').value = "";
           document.getElementById('tanggal_lapor').valueAsDate = new Date();
