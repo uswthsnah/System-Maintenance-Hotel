@@ -6,7 +6,6 @@
   <title>Sistem Maintenance Hotel</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* --- CSS UTAMA --- */
     :root {
       --primary: #3b82f6;
       --secondary: #0f172a; 
@@ -50,7 +49,6 @@
     /* --- APP LAYOUT --- */
     #appView { display: none; height: 100vh; display: flex; position: relative; }
 
-    /* SIDEBAR */
     .sidebar {
       width: var(--sidebar-width); background: var(--secondary); color: white;
       padding: 20px; display: flex; flex-direction: column;
@@ -68,27 +66,17 @@
     }
     .sidebar h2 span { color: #38bdf8; }
 
-    /* MENU LIST */
-    #dynamicMenu {
-      flex: 1; overflow-y: auto; margin-bottom: 10px;
-    }
+    #dynamicMenu { flex: 1; overflow-y: auto; margin-bottom: 10px; }
 
     .sidebar a {
       display:block; color:#94a3b8; text-decoration:none; margin: 4px 0;
       padding: 10px 12px; border-radius: 6px; transition: all 0.2s ease; font-weight: 500;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .sidebar a:hover, .sidebar a.active {
-      background: #1e293b; color: white;
-    }
+    .sidebar a:hover, .sidebar a.active { background: #1e293b; color: white; }
 
-    /* FORM TAMBAH KATEGORI */
-    .add-category-box {
-      border-top: 1px solid #334155; padding-top: 15px; margin-top: 10px;
-    }
-    .add-category-label {
-      color: #94a3b8; font-size: 0.7rem; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
-    }
+    .add-category-box { border-top: 1px solid #334155; padding-top: 15px; margin-top: 10px; }
+    .add-category-label { color: #94a3b8; font-size: 0.7rem; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
     .input-group { display: flex; gap: 5px; }
     .input-group input {
       flex: 1; background: #334155; border: 1px solid #475569; color: white;
@@ -105,33 +93,15 @@
     .sidebar .logout-btn { margin-top: 10px; color: #f87171; border: 1px solid #f87171; text-align: center; }
     .sidebar .logout-btn:hover { background: #450a0a; color: #fee2e2; }
 
-    /* MAIN CONTENT */
-    .main { 
-      flex:1; 
-      padding: 0; 
-      overflow-y: auto; 
-      position: relative; 
-      background: var(--bg-body); 
-      width: 100%;
-    }
+    .main { flex:1; padding: 0; overflow-y: auto; position: relative; background: var(--bg-body); width: 100%; }
     .content-wrapper { padding: 20px; max-width: 1200px; margin: 0 auto; }
 
-    /* HEADER MOBILE */
     .mobile-header {
-      display: none; 
-      padding: 15px 20px;
-      background: white;
-      border-bottom: 1px solid var(--border);
-      align-items: center;
-      justify-content: space-between;
+      display: none; padding: 15px 20px;
+      background: white; border-bottom: 1px solid var(--border);
+      align-items: center; justify-content: space-between;
     }
-    .hamburger {
-      font-size: 1.5rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-main);
-    }
+    .hamburger { font-size: 1.5rem; background: none; border: none; cursor: pointer; color: var(--text-main); }
 
     .card {
       background:white; padding: 20px; border-radius: 16px;
@@ -140,57 +110,38 @@
 
     .hidden { display: none !important; }
 
-    /* HEADER & BUTTONS */
     .header-flex { 
       display: flex; justify-content: space-between; align-items: flex-start; 
       margin-bottom: 20px; flex-direction: column; gap: 15px;
     }
-    @media (min-width: 768px) {
-      .header-flex { flex-direction: row; align-items: center; }
-    }
+    @media (min-width: 768px) { .header-flex { flex-direction: row; align-items: center; } }
     
     .page-title h2 { font-size: 1.25rem; font-weight: 700; color: #1e293b; }
     .page-title p { color: var(--text-muted); font-size: 0.85rem; }
 
     .add-btn-inline { 
       display: inline-flex; align-items: center; justify-content: center;
-      padding: 10px 20px; background: var(--green); 
-      color: white; border-radius: 8px; text-decoration: none; font-weight: 600; 
-      font-size: 0.9rem; cursor: pointer; border: none; width: 100%;
+      padding: 10px 20px; background: var(--green); color: white; border-radius: 8px; 
+      text-decoration: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; width: 100%;
     }
     @media (min-width: 768px) { .add-btn-inline { width: auto; } }
     .add-btn-inline:hover { background: #059669; }
 
-    /* SEARCH */
     .search-box { position: relative; margin-bottom: 20px; }
     .search-box input {
       width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--border);
-      border-radius: 10px; font-size: 0.9rem; color: var(--text-main); background: #f8fafc;
-      transition: all 0.3s;
+      border-radius: 10px; font-size: 0.9rem; color: var(--text-main); background: #f8fafc; transition: all 0.3s;
     }
     .search-box input:focus { outline: none; border-color: var(--primary); background: white; }
-    .search-box::before {
-      content: "🔍"; position: absolute; left: 12px; top: 50%;
-      transform: translateY(-50%); opacity: 0.5; font-size: 0.9rem;
-    }
+    .search-box::before { content: "🔍"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 0.9rem; }
 
-    /* TABLE SCROLL */
-    .table-responsive {
-      overflow-x: auto;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
+    .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
     table { width:100%; border-collapse:collapse; min-width: 800px; }
-    th { 
-      text-align: left; padding: 12px; background: #f8fafc; color: var(--text-muted); 
-      font-weight: 600; font-size: 0.75rem; text-transform: uppercase; 
-      letter-spacing: 0.5px; border-bottom: 2px solid var(--border); white-space: nowrap;
-    }
+    th { text-align: left; padding: 12px; background: #f8fafc; color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); white-space: nowrap; }
     td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: var(--text-main); vertical-align: middle; font-size: 0.85rem;}
     tr:last-child td { border-bottom: none; }
     tr:hover td { background-color: #f8fafc; }
 
-    /* BADGES */
     .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
     .done { background: #dcfce7; color: #166534; }
     .process { background: #fef9c3; color: #854d0e; }
@@ -200,19 +151,16 @@
     .edit-link { background: #e0f2fe; color: #0369a1; }
     .delete-link { background: #fee2e2; color: #991b1b; }
 
-    /* --- FORM MODAL --- */
     .modal-container {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
       z-index: 1000; justify-content: center; align-items: center; padding: 20px;
     }
-
     .modal-card {
       background: white; width: 100%; max-width: 500px; border-radius: 16px;
       padding: 30px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
       animation: popIn 0.2s ease-out; max-height: 90vh; overflow-y: auto;
     }
-
     @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
     .form-title { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 20px; text-align: left; }
@@ -229,28 +177,18 @@
     .btn-secondary:hover { background: #cbd5e1; }
     .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
 
-    /* --- RESPONSIVE QUERIES --- */
     @media (max-width: 768px) {
-      /* PERBAIKAN UTAMA: UBAH ARAH FLEX JADI VERTIKAL (ATAS-BAWAH) */
-      #appView {
-        flex-direction: column;
-      }
-      
-      .sidebar {
-        position: fixed; left: -100%; top: 0; bottom: 0; width: 80%; max-width: 300px;
-        box-shadow: 10px 0 20px rgba(0,0,0,0.2);
-      }
+      #appView { flex-direction: column; }
+      .sidebar { position: fixed; left: -100%; top: 0; bottom: 0; width: 80%; max-width: 300px; box-shadow: 10px 0 20px rgba(0,0,0,0.2); }
       .sidebar.active { left: 0; }
-      
       .mobile-header { display: flex; }
       .content-wrapper { padding: 15px; }
     }
-
   </style>
 </head>
 <body>
 
-  <!-- 1. LOGIN VIEW -->
+  <!-- 1. LOGIN VIEW (TANPA PETUNJUK ADMIN) -->
   <div id="loginView">
     <div class="login-card">
       <div class="login-logo">🏨</div>
@@ -258,35 +196,34 @@
       <p class="login-subtitle">Silakan login untuk mengakses dashboard.</p>
       <form onsubmit="app.login(event)">
         <div class="form-group" style="text-align: left;">
-          <label>Username</label><input type="text" id="username" placeholder="admin" required>
+          <label>Username</label>
+          <!-- Placeholder dikosongkan agar terlihat profesional -->
+          <input type="text" id="username" placeholder="Masukkan username" required>
         </div>
         <div class="form-group" style="text-align: left;">
-          <label>Password</label><input type="password" id="password" placeholder="admin" required>
+          <label>Password</label>
+          <!-- Placeholder dikosongkan -->
+          <input type="password" id="password" placeholder="Masukkan password" required>
         </div>
         <button type="submit" class="btn btn-primary">Login Dashboard</button>
       </form>
-      <p style="margin-top: 15px; font-size: 0.8rem; color: #94a3b8;">Gunakan: admin / admin</p>
+      <!-- Tulisan petunjuk "Gunakan: admin / admin" DIHAPUS -->
     </div>
   </div>
 
   <!-- 2. APP VIEW -->
   <div id="appView" style="display: none;">
-    
-    <!-- HEADER MOBILE (Muncul hanya di HP) -->
     <div class="mobile-header">
       <button class="hamburger" onclick="app.toggleSidebar()">☰</button>
       <div style="font-weight: 700; color: var(--secondary);">Maintenance System</div>
       <div style="width: 24px;"></div> 
     </div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebarMenu">
       <div class="sidebar-header">
         <h2>System<br><span>Maintenance Hotel</span></h2>
       </div>
-      
       <div id="dynamicMenu"></div>
-
       <div class="add-category-box">
         <div class="add-category-label">Tambah Kategori</div>
         <div class="input-group">
@@ -294,7 +231,6 @@
           <button onclick="app.addCategory()" title="Tambah">+</button>
         </div>
       </div>
-
       <a href="#" onclick="app.logout()" class="nav-link logout-btn">🚪 Logout</a>
     </div>
 
@@ -317,7 +253,6 @@
             <div id="noDataMessage" class="hidden" style="text-align: center; padding: 40px; color: #94a3b8; font-size: 0.9rem;">
               Data tidak ditemukan
             </div>
-
             <table id="myTable">
               <thead>
                 <tr>
@@ -356,7 +291,6 @@
           </select>
         </div>
         <div class="form-group"><label>Nama Teknisi</label><input type="text" id="teknisi" name="teknisi" required autocomplete="off"></div>
-        
         <button type="submit" class="btn btn-primary">Tambah Data Baru</button>
         <button type="button" onclick="app.closeModals()" class="btn btn-secondary">Batal</button>
       </form>
@@ -388,9 +322,7 @@
         const data = localStorage.getItem(DB_KEY);
         if (!data) {
           const initialData = {
-            ac: [
-              { _id: "1", kode: "M008", lokasi: "Kamar 820", kerusakan: "AC tidak dingin", tanggal_lapor: "2026-04-10", status: "Done", teknisi: { nama: "Budi" } }
-            ],
+            ac: [{ _id: "1", kode: "M008", lokasi: "Kamar 820", kerusakan: "AC tidak dingin", tanggal_lapor: "2026-04-10", status: "Done", teknisi: { nama: "Budi" } }],
             jetspray: [], minibar: [], vincard: []
           };
           localStorage.setItem(DB_KEY, JSON.stringify(initialData));
@@ -403,14 +335,10 @@
 
     const app = {
       currentType: 'ac',
-
       init: () => {
         localStorage.removeItem(AUTH_KEY); 
-        if (localStorage.getItem(AUTH_KEY) === 'true') {
-          app.showApp();
-        } else {
-          app.showLogin();
-        }
+        if (localStorage.getItem(AUTH_KEY) === 'true') app.showApp();
+        else app.showLogin();
       },
 
       login: (e) => {
@@ -421,59 +349,34 @@
           localStorage.setItem(AUTH_KEY, 'true');
           app.showApp();
         } else {
-          alert("Username/Password salah (Coba: admin/admin)");
+          alert("Username atau Password salah!");
         }
       },
-      logout: () => { 
-        if(confirm("Keluar?")) { 
-          localStorage.removeItem(AUTH_KEY); 
-          location.reload(); 
-        } 
-      },
+      logout: () => { if(confirm("Keluar?")) { localStorage.removeItem(AUTH_KEY); location.reload(); } },
       showLogin: () => { document.getElementById('loginView').style.display = 'flex'; document.getElementById('appView').style.display = 'none'; },
-      showApp: () => { 
-        document.getElementById('loginView').style.display = 'none'; 
-        document.getElementById('appView').style.display = 'flex'; 
-        app.renderSidebar(); 
-        app.navigate('ac'); 
-      },
+      showApp: () => { document.getElementById('loginView').style.display = 'none'; document.getElementById('appView').style.display = 'flex'; app.renderSidebar(); app.navigate('ac'); },
 
       toggleSidebar: () => {
         const sb = document.getElementById('sidebarMenu');
         const ov = document.getElementById('sidebarOverlay');
-        if (sb.classList.contains('active')) {
-          sb.classList.remove('active');
-          ov.style.display = 'none';
-        } else {
-          sb.classList.add('active');
-          ov.style.display = 'block';
-        }
+        if (sb.classList.contains('active')) { sb.classList.remove('active'); ov.style.display = 'none'; }
+        else { sb.classList.add('active'); ov.style.display = 'block'; }
       },
 
       renderSidebar: () => {
         const db = store.get();
         const menuContainer = document.getElementById('dynamicMenu');
         menuContainer.innerHTML = '';
-
         Object.keys(db).forEach(key => {
           const a = document.createElement('a');
-          a.href = "#";
-          a.className = "nav-link";
-          a.id = `nav-${key}`;
-          
+          a.href = "#"; a.className = "nav-link"; a.id = `nav-${key}`;
           let icon = "📝"; 
           if(key.includes('ac')) icon = "❄️";
           if(key.includes('water') || key.includes('spray')) icon = "🚿";
           if(key.includes('bar')) icon = "🍷";
           if(key.includes('card') || key.includes('key')) icon = "🔑";
-          
           a.innerText = `${icon} ${key.charAt(0).toUpperCase() + key.slice(1)} Problem`;
-          a.onclick = (e) => { 
-            e.preventDefault(); 
-            app.navigate(key); 
-            if(window.innerWidth <= 768) app.toggleSidebar();
-          };
-          
+          a.onclick = (e) => { e.preventDefault(); app.navigate(key); if(window.innerWidth <= 768) app.toggleSidebar(); };
           menuContainer.appendChild(a);
         });
       },
@@ -508,7 +411,6 @@
         app.closeModals();
         const modal = document.getElementById('formModal');
         const title = document.getElementById('formTitle');
-
         if (editData) {
           title.innerText = `Edit Data`;
           document.getElementById('editId').value = editData._id;
@@ -545,9 +447,7 @@
         if (editId) {
           const index = collection.findIndex(item => item._id == editId);
           if (index !== -1) collection[index] = { ...collection[index], ...formData, _id: editId };
-        } else {
-          collection.push({ _id: Date.now().toString(), ...formData });
-        }
+        } else { collection.push({ _id: Date.now().toString(), ...formData }); }
         db[app.currentType] = collection;
         store.save(db);
         app.closeModals();
@@ -573,19 +473,13 @@
         const noData = document.getElementById('noDataMessage');
         tbody.innerHTML = '';
         data.sort((a,b) => b._id.localeCompare(a._id));
-        
-        if (data.length === 0) { 
-          noData.classList.remove('hidden'); 
-          noData.innerText = "Belum ada data";
-          return; 
-        }
+        if (data.length === 0) { noData.classList.remove('hidden'); noData.innerText = "Belum ada data"; return; }
         noData.classList.add('hidden');
 
         data.forEach(item => {
           let statusClass = "process";
           if (item.status === "Done") statusClass = "done";
           if (item.status === "Pending") statusClass = "pending";
-
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td><span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:4px;">${item.kode}</span></td>
@@ -612,7 +506,6 @@
         const tr = table.getElementsByTagName("tr");
         const noData = document.getElementById("noDataMessage");
         let hasVisibleRow = false;
-
         for (let i = 1; i < tr.length; i++) {
           let tds = tr[i].getElementsByTagName("td");
           let match = false;
@@ -620,13 +513,8 @@
           tr[i].style.display = match ? "" : "none";
           if(match) hasVisibleRow = true;
         }
-
-        if (hasVisibleRow) {
-          noData.classList.add('hidden');
-        } else {
-          noData.classList.remove('hidden');
-          noData.innerText = "Data tidak ditemukan";
-        }
+        if (hasVisibleRow) { noData.classList.add('hidden'); }
+        else { noData.classList.remove('hidden'); noData.innerText = "Data tidak ditemukan"; }
       }
     };
 
