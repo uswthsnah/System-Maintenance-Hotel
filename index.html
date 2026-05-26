@@ -188,26 +188,26 @@
 </head>
 <body>
 
-  <!-- 1. LOGIN VIEW (TANPA PETUNJUK ADMIN) -->
+  <!-- 1. LOGIN VIEW -->
   <div id="loginView">
     <div class="login-card">
       <div class="login-logo">🏨</div>
       <h1 class="login-title">Sistem Maintenance</h1>
       <p class="login-subtitle">Silakan login untuk mengakses dashboard.</p>
-      <form onsubmit="app.login(event)">
+      <!-- TAMBAHKAN autocomplete="off" DI FORM -->
+      <form onsubmit="app.login(event)" autocomplete="off">
         <div class="form-group" style="text-align: left;">
           <label>Username</label>
-          <!-- Placeholder dikosongkan agar terlihat profesional -->
-          <input type="text" id="username" placeholder="Masukkan username" required>
+          <!-- TAMBAHKAN autocomplete="off" DI INPUT -->
+          <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
         </div>
         <div class="form-group" style="text-align: left;">
           <label>Password</label>
-          <!-- Placeholder dikosongkan -->
-          <input type="password" id="password" placeholder="Masukkan password" required>
+          <!-- GUNAKAN new-password AGAR BROWSER TIDAK MENYURUH SAVE -->
+          <input type="password" id="password" placeholder="Masukkan password" required autocomplete="new-password">
         </div>
         <button type="submit" class="btn btn-primary">Login Dashboard</button>
       </form>
-      <!-- Tulisan petunjuk "Gunakan: admin / admin" DIHAPUS -->
     </div>
   </div>
 
