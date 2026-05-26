@@ -89,9 +89,7 @@
     .add-category-label {
       color: #94a3b8; font-size: 0.7rem; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
     }
-    .input-group {
-      display: flex; gap: 5px;
-    }
+    .input-group { display: flex; gap: 5px; }
     .input-group input {
       flex: 1; background: #334155; border: 1px solid #475569; color: white;
       padding: 8px 10px; border-radius: 6px; outline: none; font-size: 0.85rem;
@@ -116,13 +114,11 @@
       background: var(--bg-body); 
       width: 100%;
     }
-    .content-wrapper { 
-      padding: 20px; max-width: 1200px; margin: 0 auto; 
-    }
+    .content-wrapper { padding: 20px; max-width: 1200px; margin: 0 auto; }
 
-    /* HEADER MOBILE (Hamburger) */
+    /* HEADER MOBILE */
     .mobile-header {
-      display: none; /* Hidden di desktop */
+      display: none; 
       padding: 15px 20px;
       background: white;
       border-bottom: 1px solid var(--border);
@@ -142,17 +138,12 @@
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border);
     }
 
-    /* UTILS */
     .hidden { display: none !important; }
 
     /* HEADER & BUTTONS */
     .header-flex { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: flex-start; /* Align top agar text tidak tengah2 */
-      margin-bottom: 20px; 
-      flex-direction: column; 
-      gap: 15px;
+      display: flex; justify-content: space-between; align-items: flex-start; 
+      margin-bottom: 20px; flex-direction: column; gap: 15px;
     }
     @media (min-width: 768px) {
       .header-flex { flex-direction: row; align-items: center; }
@@ -167,9 +158,7 @@
       color: white; border-radius: 8px; text-decoration: none; font-weight: 600; 
       font-size: 0.9rem; cursor: pointer; border: none; width: 100%;
     }
-    @media (min-width: 768px) {
-      .add-btn-inline { width: auto; }
-    }
+    @media (min-width: 768px) { .add-btn-inline { width: auto; } }
     .add-btn-inline:hover { background: #059669; }
 
     /* SEARCH */
@@ -191,7 +180,7 @@
       border-radius: 8px;
       border: 1px solid var(--border);
     }
-    table { width:100%; border-collapse:collapse; min-width: 800px; } /* Min width biar bisa discroll di HP */
+    table { width:100%; border-collapse:collapse; min-width: 800px; }
     th { 
       text-align: left; padding: 12px; background: #f8fafc; color: var(--text-muted); 
       font-weight: 600; font-size: 0.75rem; text-transform: uppercase; 
@@ -242,6 +231,11 @@
 
     /* --- RESPONSIVE QUERIES --- */
     @media (max-width: 768px) {
+      /* PERBAIKAN UTAMA: UBAH ARAH FLEX JADI VERTIKAL (ATAS-BAWAH) */
+      #appView {
+        flex-direction: column;
+      }
+      
       .sidebar {
         position: fixed; left: -100%; top: 0; bottom: 0; width: 80%; max-width: 300px;
         box-shadow: 10px 0 20px rgba(0,0,0,0.2);
@@ -282,7 +276,7 @@
     <div class="mobile-header">
       <button class="hamburger" onclick="app.toggleSidebar()">☰</button>
       <div style="font-weight: 700; color: var(--secondary);">Maintenance System</div>
-      <div style="width: 24px;"></div> <!-- Spacer -->
+      <div style="width: 24px;"></div> 
     </div>
 
     <!-- SIDEBAR -->
@@ -319,7 +313,6 @@
             <input type="text" id="searchInput" placeholder="Cari kode, lokasi, kerusakan..." onkeyup="app.filterTable()">
           </div>
 
-          <!-- WRAPPER AGAR TABEL BISA DISCROLL DI HP -->
           <div class="table-responsive">
             <div id="noDataMessage" class="hidden" style="text-align: center; padding: 40px; color: #94a3b8; font-size: 0.9rem;">
               Data tidak ditemukan
@@ -384,7 +377,6 @@
     </div>
   </div>
 
-  <!-- OVERLAY HITAM UNTUK SIDEBAR MOBILE -->
   <div id="sidebarOverlay" onclick="app.toggleSidebar()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:40;"></div>
 
   <script>
@@ -399,9 +391,7 @@
             ac: [
               { _id: "1", kode: "M008", lokasi: "Kamar 820", kerusakan: "AC tidak dingin", tanggal_lapor: "2026-04-10", status: "Done", teknisi: { nama: "Budi" } }
             ],
-            jetspray: [], 
-            minibar: [], 
-            vincard: []
+            jetspray: [], minibar: [], vincard: []
           };
           localStorage.setItem(DB_KEY, JSON.stringify(initialData));
           return initialData;
@@ -448,7 +438,6 @@
         app.navigate('ac'); 
       },
 
-      // --- RESPONSIVE SIDEBAR ---
       toggleSidebar: () => {
         const sb = document.getElementById('sidebarMenu');
         const ov = document.getElementById('sidebarOverlay');
@@ -482,7 +471,6 @@
           a.onclick = (e) => { 
             e.preventDefault(); 
             app.navigate(key); 
-            // Tutup sidebar otomatis di HP setelah klik menu
             if(window.innerWidth <= 768) app.toggleSidebar();
           };
           
